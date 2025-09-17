@@ -60,13 +60,17 @@ function App() {
   // Toggle expand archive card - Fixed to prevent interference
   const toggleExpandArchive = (id, event) => {
     event.stopPropagation(); // Prevent card click from interfering
-    const newExpanded = new Set(expandedArchives);
-    if (newExpanded.has(id)) {
-      newExpanded.delete(id);
-    } else {
-      newExpanded.add(id);
-    }
-    setExpandedArchives(newExpanded);
+    setExpandedArchives(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(id)) {
+        newExpanded.delete(id);
+      } else {
+        // Close all others first, then open this one
+        newExpanded.clear();
+        newExpanded.add(id);
+      }
+      return newExpanded;
+    });
   };
 
   // Toggle favorite note
@@ -447,15 +451,10 @@ function NoteCard({
       <div className="note-header">
         <h3 className="note-title">
           {note.title}
-          {isArchive && (
-            <span className="expand-indicator">
-              {isCollapsed ? ' ▼' : ' ▲'}
-            </span>
-          )}
         </h3>
         <div className="note-actions" onClick={(e) => e.stopPropagation()}>
           <button 
-            className="action-btn favorite-btn" 
+            className={`action-btn favorite-btn ${isFavorite ? 'favorited' : ''}`}
             onClick={() => onToggleFavorite(note.id)}
             title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >

@@ -281,6 +281,26 @@ body::after {
   }
 }
 
+@keyframes favoriteGlow {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(255, 20, 147, 0.6);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.4);
+  }
+}
+
+@keyframes favoritePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 20px rgba(255, 20, 147, 0.6);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(255, 20, 147, 0.8);
+  }
+}
+
 @keyframes slideInDown {
   from {
     opacity: 0;
@@ -697,10 +717,37 @@ body::after {
   animation: glow 2s ease-in-out infinite;
 }
 
-/* Collapsible Archive Card */
+/* Collapsible Archive Card - Clean Design */
 .note-card.archived.collapsed {
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   cursor: pointer;
+  transition: all var(--transition-normal);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-light);
+  position: relative;
+}
+
+.note-card.archived.collapsed::after {
+  content: 'Click to expand';
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.note-card.archived.collapsed:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.note-card.archived.collapsed:hover::after {
+  opacity: 1;
 }
 
 .note-card.archived.collapsed .note-body {
@@ -715,20 +762,21 @@ body::after {
   margin-bottom: 0;
 }
 
-.expand-indicator {
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
-  margin-left: 0.5rem;
-  transition: transform 0.3s ease;
+.note-card.archived.collapsed .note-title {
+  margin-bottom: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-.note-card.archived.collapsed .expand-indicator::after {
-  content: ' ▼';
+.note-card.archived.collapsed .note-actions {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.note-card.archived:not(.collapsed) .expand-indicator::after {
-  content: ' ▲';
-}
+
 
 .note-header {
   display: flex;
@@ -786,16 +834,45 @@ body::after {
 }
 
 .favorite-btn {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 20, 147, 0.8);
   color: white;
   box-shadow: 0 2px 10px rgba(255, 20, 147, 0.3);
   font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.favorite-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s;
 }
 
 .favorite-btn:hover {
-  background: rgba(255, 255, 255, 1);
+  background: linear-gradient(135deg, #ff1493, #ff69b4, #ff1493);
   transform: scale(1.2) rotate(5deg);
-  animation: heartbeat 0.6s ease-in-out;
+  animation: heartbeat 0.6s ease-in-out, favoriteGlow 2s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.6);
+}
+
+.favorite-btn:hover::before {
+  left: 100%;
+}
+
+/* Favorited state */
+.favorite-btn.favorited {
+  background: linear-gradient(135deg, #ff1493, #ff69b4, #ff1493);
+  animation: favoritePulse 1.5s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.6);
+}
+
+.favorite-btn.favorited:hover {
+  animation: favoriteGlow 1s ease-in-out infinite, heartbeat 0.6s ease-in-out;
 }
 
 .archive-btn {
