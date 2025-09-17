@@ -891,51 +891,18 @@ function NoteCard({
   );
 }
 
-// Professional Footer
+// Simple Footer
 function Footer() {
   return (
     <footer className="app-footer">
       <div className="footer-content">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <div className="footer-logo">
-              <div className="logo-icon">N</div>
-              <span>Noto</span>
-            </div>
-            <p className="footer-tagline">
-              The most beautiful notes app for the modern digital generation
-            </p>
-          </div>
-          
-          <div className="footer-links">
-            <div className="footer-section">
-              <h4>Developer</h4>
-              <p>Surya Hanjaya</p>
-              <p>AI Researcher • Full-Stack Developer</p>
-              <p>Informatics Engineering '23</p>
-            </div>
-            
-            <div className="footer-section">
-              <h4>Connect</h4>
-              <div className="social-links">
-                <a href="https://www.linkedin.com/in/surya-hanjaya/" target="_blank" rel="noopener noreferrer" className="social-link">
-                  LinkedIn
-                </a>
-                <a href="https://github.com/suryahanjaya?tab=repositories" target="_blank" rel="noopener noreferrer" className="social-link">
-                  GitHub
-                </a>
-                <a href="https://www.instagram.com/h4njy/" target="_blank" rel="noopener noreferrer" className="social-link">
-                  Instagram
-                </a>
-              </div>
-            </div>
-          </div>
+        <div className="footer-brand">
+          <span className="footer-logo">Noto</span>
+          <span className="footer-tagline">Beautiful notes for modern generation</span>
         </div>
         
-        <div className="footer-bottom">
-          <p className="copyright">
-            © 2025 Noto. Built with modern web technologies and innovative design.
-          </p>
+        <div className="footer-info">
+          <p className="copyright">© 2025 Built by Surya Hanjaya</p>
         </div>
       </div>
     </footer>
