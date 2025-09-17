@@ -25,8 +25,21 @@ function App() {
   const [editBody, setEditBody] = useState('');
   const [editDate, setEditDate] = useState('');
   const [showMenu, setShowMenu] = useState(new Set());
-  const [lockedItems, setLockedItems] = useState(new Set());
+  const [showFolderMenu, setShowFolderMenu] = useState(new Set());
   const [showFolderPopup, setShowFolderPopup] = useState(null);
+  const [folders, setFolders] = useState([
+    { id: 1, name: 'Movie Review', date: '12/12/2021', color: 'blue', noteCount: 5 },
+    { id: 2, name: 'Class Notes', date: '12/12/2021', color: 'pink', noteCount: 8 },
+    { id: 3, name: 'Book Lists', date: '12/12/2021', color: 'yellow', noteCount: 3 },
+  ]);
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+  const [editingFolder, setEditingFolder] = useState(null);
+  const [editFolderName, setEditFolderName] = useState('');
+  const [showFolderNotes, setShowFolderNotes] = useState(false);
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [lockedItems, setLockedItems] = useState(new Set());
 
   // Apply theme
   React.useEffect(() => {
@@ -44,12 +57,22 @@ function App() {
       title: title.trim(),
       body: body.trim(),
       archived: false,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      folderId: selectedFolder
     };
     
     setNotes([...notes, newNote]);
     setTitle('');
     setBody('');
+    
+    // Update folder note count
+    if (selectedFolder) {
+      setFolders(folders.map(folder => 
+        folder.id === selectedFolder 
+          ? { ...folder, noteCount: folder.noteCount + 1 }
+          : folder
+      ));
+    }
   };
 
   // Fungsi untuk menghapus catatan
@@ -102,15 +125,17 @@ function App() {
     setShowMenu(newShowMenu);
   };
 
-  const toggleLock = (id) => {
-    const newLockedItems = new Set(lockedItems);
-    if (newLockedItems.has(id)) {
-      newLockedItems.delete(id);
+  // Fungsi untuk toggle folder menu
+  const toggleFolderMenu = (id) => {
+    const newShowFolderMenu = new Set(showFolderMenu);
+    if (newShowFolderMenu.has(id)) {
+      newShowFolderMenu.delete(id);
     } else {
-      newLockedItems.add(id);
+      newShowFolderMenu.add(id);
     }
-    setLockedItems(newLockedItems);
+    setShowFolderMenu(newShowFolderMenu);
   };
+
 
   const openFolderPopup = (folderId) => {
     setShowFolderPopup(folderId);
@@ -118,6 +143,108 @@ function App() {
 
   const closeFolderPopup = () => {
     setShowFolderPopup(null);
+  };
+
+  // Fungsi untuk membuat folder baru
+  const createFolder = () => {
+    if (newFolderName.trim() === '') return;
+    
+    const newFolder = {
+      id: +new Date(),
+      name: newFolderName.trim(),
+      date: new Date().toLocaleDateString(),
+      color: ['blue', 'pink', 'yellow'][Math.floor(Math.random() * 3)],
+      icon: '📄',
+      noteCount: 0
+    };
+    
+    setFolders([...folders, newFolder]);
+    setNewFolderName('');
+    setShowCreateFolderModal(false);
+  };
+
+  // Fungsi untuk memilih folder
+  const selectFolder = (folderId) => {
+    setSelectedFolder(folderId);
+  };
+
+  // Fungsi untuk membuka modal create folder
+  const openCreateFolderModal = () => {
+    setShowCreateFolderModal(true);
+  };
+
+  // Fungsi untuk edit folder
+  const editFolder = (folderId) => {
+    const folder = folders.find(f => f.id === folderId);
+    if (folder) {
+      setEditingFolder(folderId);
+      setEditFolderName(folder.name);
+    }
+  };
+
+  // Fungsi untuk menyimpan edit folder
+  const saveEditFolder = () => {
+    if (editFolderName.trim() === '') return;
+    
+    setFolders(folders.map(folder => 
+      folder.id === editingFolder 
+        ? { ...folder, name: editFolderName.trim() }
+        : folder
+    ));
+    
+    setEditingFolder(null);
+    setEditFolderName('');
+  };
+
+  // Fungsi untuk hapus folder
+  const deleteFolder = (folderId) => {
+    if (window.confirm('Are you sure you want to delete this folder? All notes in this folder will be moved to "No folder".')) {
+      // Move notes from this folder to no folder
+      setNotes(notes.map(note => 
+        note.folderId === folderId 
+          ? { ...note, folderId: null }
+          : note
+      ));
+      
+      // Remove folder
+      setFolders(folders.filter(folder => folder.id !== folderId));
+    }
+  };
+
+  // Fungsi untuk mendapatkan catatan dalam folder
+  const getNotesInFolder = (folderId) => {
+    return notes.filter(note => note.folderId === folderId);
+  };
+
+  // Fungsi untuk scroll ke catatan
+  const scrollToNote = (noteId) => {
+    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+    if (noteElement) {
+      noteElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add highlight effect
+      noteElement.style.animation = 'glow 2s ease-in-out';
+      setTimeout(() => {
+        noteElement.style.animation = '';
+      }, 2000);
+    }
+  };
+
+  // Fungsi untuk menampilkan catatan dalam folder
+  const showFolderNotesList = (folderId) => {
+    if (folderId === selectedFolderId) {
+      setShowFolderNotes(false);
+      setSelectedFolderId(null);
+    } else {
+      setShowFolderNotes(true);
+      setSelectedFolderId(folderId);
+    }
+  };
+
+  // Fungsi untuk klik catatan dari folder
+  const handleNoteClick = (noteId) => {
+    scrollToNote(noteId);
+    setShowFolderNotes(false);
+    setSelectedFolderId(null);
   };
 
   // Fungsi untuk mengarsipkan/mengaktifkan catatan
@@ -152,6 +279,17 @@ function App() {
       newFavorites.add(id);
     }
     setFavorites(newFavorites);
+  };
+
+  // Toggle lock note
+  const toggleLock = (id) => {
+    const newLockedItems = new Set(lockedItems);
+    if (newLockedItems.has(id)) {
+      newLockedItems.delete(id);
+    } else {
+      newLockedItems.add(id);
+    }
+    setLockedItems(newLockedItems);
   };
 
   // Export notes as JSON
@@ -247,14 +385,26 @@ function App() {
           body={body}
           setBody={setBody}
           addNote={addNote}
+          folders={folders}
+          selectedFolder={selectedFolder}
+          onSelectFolder={selectFolder}
             />
           </div>
           
           <div className="right-section">
             <RecentFoldersSection 
-              onFolderClick={openFolderPopup}
-              lockedItems={lockedItems}
-              onToggleLock={toggleLock}
+              folders={folders}
+              onFolderClick={selectFolder}
+              onCreateFolder={openCreateFolderModal}
+              onEditFolder={editFolder}
+              onDeleteFolder={deleteFolder}
+              onShowFolderNotes={showFolderNotesList}
+              showFolderNotes={showFolderNotes}
+              selectedFolderId={selectedFolderId}
+              folderNotes={getNotesInFolder(selectedFolderId)}
+              onNoteClick={handleNoteClick}
+              showFolderMenu={showFolderMenu}
+              onToggleFolderMenu={toggleFolderMenu}
             />
           </div>
         </div>
@@ -341,6 +491,90 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Create Folder Modal */}
+      {showCreateFolderModal && (
+        <div className="folder-popup-overlay" onClick={() => setShowCreateFolderModal(false)}>
+          <div className="folder-popup" onClick={(e) => e.stopPropagation()}>
+            <div className="folder-popup-header">
+              <h3>Create New Folder</h3>
+              <button className="close-btn" onClick={() => setShowCreateFolderModal(false)}>✕</button>
+            </div>
+            <div className="folder-popup-content">
+              <div className="input-group">
+                <label htmlFor="folderName" className="input-label">Folder Name</label>
+                <input
+                  type="text"
+                  id="folderName"
+                  value={newFolderName}
+                  onChange={(e) => setNewFolderName(e.target.value)}
+                  placeholder="Enter folder name..."
+                  className="date-input"
+                  autoFocus
+                />
+              </div>
+              <div className="form-actions">
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={() => setShowCreateFolderModal(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-primary" 
+                  onClick={createFolder}
+                >
+                  Create Folder
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Folder Modal */}
+      {editingFolder && (
+        <div className="folder-popup-overlay" onClick={() => setEditingFolder(null)}>
+          <div className="folder-popup" onClick={(e) => e.stopPropagation()}>
+            <div className="folder-popup-header">
+              <h3>Edit Folder</h3>
+              <button className="close-btn" onClick={() => setEditingFolder(null)}>✕</button>
+            </div>
+            <div className="folder-popup-content">
+              <div className="input-group">
+                <label htmlFor="editFolderName" className="input-label">Folder Name</label>
+                <input
+                  type="text"
+                  id="editFolderName"
+                  value={editFolderName}
+                  onChange={(e) => setEditFolderName(e.target.value)}
+                  placeholder="Enter folder name..."
+                  className="date-input"
+                  autoFocus
+                />
+              </div>
+              <div className="form-actions">
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={() => setEditingFolder(null)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-primary" 
+                  onClick={saveEditFolder}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       <Footer />
     </>
@@ -379,63 +613,104 @@ function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport }) {
 
 
 // Komponen RecentFoldersSection
-function RecentFoldersSection({ onFolderClick, lockedItems, onToggleLock }) {
-  const [activeFilter, setActiveFilter] = useState('This Week');
-  
-  const folders = [
-    { id: 1, name: 'Movie Review', date: '12/12/2021', color: 'blue', icon: '📄' },
-    { id: 2, name: 'Class Notes', date: '12/12/2021', color: 'pink', icon: '📄' },
-    { id: 3, name: 'Book Lists', date: '12/12/2021', color: 'yellow', icon: '📄' },
-  ];
-  
-  const filters = ['Todays', 'This Week', 'This Month'];
-  
+function RecentFoldersSection({ 
+  folders, 
+  onFolderClick, 
+  onCreateFolder, 
+  onEditFolder, 
+  onDeleteFolder,
+  onShowFolderNotes,
+  showFolderNotes,
+  selectedFolderId,
+  folderNotes,
+  onNoteClick,
+  showFolderMenu,
+  onToggleFolderMenu
+}) {
   return (
     <section className="recent-folders-section">
       <div className="section-header">
         <h2>Recent Folders</h2>
-        <div className="filter-tabs">
-          {filters.map(filter => (
-            <button
-              key={filter}
-              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
       </div>
       
       <div className="folders-grid">
         {folders.map(folder => (
-          <div key={folder.id} className={`folder-card ${folder.color}`} onClick={() => onFolderClick(folder.id)}>
+          <div key={folder.id} className={`folder-card ${folder.color}`}>
             <div className="folder-header">
-              <div className="folder-icon">{folder.icon}</div>
               <div className="folder-actions">
                 <button 
-                  className="lock-btn" 
-                  onClick={(e) => { e.stopPropagation(); onToggleLock(folder.id); }}
-                  title={lockedItems.has(folder.id) ? 'Unlock folder' : 'Lock folder'}
+                  className="folder-menu-btn" 
+                  onClick={(e) => { e.stopPropagation(); onToggleFolderMenu(folder.id); }}
+                  title="More options"
                 >
-                  {lockedItems.has(folder.id) ? '🔒' : '🔓'}
+                  ⋯
                 </button>
-                <button className="folder-menu" onClick={(e) => e.stopPropagation()}>⋯</button>
+                
+                {showFolderMenu && showFolderMenu.has(folder.id) && (
+                  <div className="folder-menu-popup">
+                    <button 
+                      className="folder-menu-item" 
+                      onClick={(e) => { e.stopPropagation(); onEditFolder(folder.id); }}
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      className="folder-menu-item" 
+                      onClick={(e) => { e.stopPropagation(); onDeleteFolder(folder.id); }}
+                    >
+                      Delete
+                    </button>
+                    <button 
+                      className="folder-menu-item" 
+                      onClick={(e) => { e.stopPropagation(); onShowFolderNotes(folder.id); }}
+                    >
+                      View Notes
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="folder-content">
+            <div className="folder-content" onClick={() => onFolderClick(folder.id)}>
               <h3>{folder.name}</h3>
               <p>{folder.date}</p>
+              <p className="note-count">{folder.noteCount} notes</p>
             </div>
           </div>
         ))}
-        <div className="folder-card new-folder">
+        <div className="folder-card new-folder" onClick={onCreateFolder}>
           <div className="new-folder-content">
             <div className="new-folder-icon">📁</div>
             <span>New folder</span>
           </div>
         </div>
       </div>
+
+      {/* Folder Notes List */}
+      {showFolderNotes && selectedFolderId && (
+        <div className="folder-notes-list">
+          <div className="folder-notes-header">
+            <h3>Notes in {folders.find(f => f.id === selectedFolderId)?.name}</h3>
+            <button className="close-notes-btn" onClick={() => onShowFolderNotes(null)}>✕</button>
+          </div>
+          <div className="folder-notes-content">
+            {folderNotes.length === 0 ? (
+              <p className="no-notes">No notes in this folder</p>
+            ) : (
+              folderNotes.map(note => (
+                <div 
+                  key={note.id} 
+                  className="folder-note-item"
+                  onClick={() => onNoteClick(note.id)}
+                >
+                  <h4>{note.title}</h4>
+                  <p>{note.body.substring(0, 100)}...</p>
+                  <span className="note-date">{new Date(note.createdAt).toLocaleDateString()}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -468,19 +743,19 @@ function FilterControls({
       </div>
       
       <div className="filter-group">
-        <label>🏷️ Tags:</label>
+        <label>Tags:</label>
         <select 
           className="filter-select"
           value={selectedTag}
           onChange={(e) => setSelectedTag(e.target.value)}
         >
           <option value="all">All</option>
-          <option value="favorites">❤️ Favorites ({favoriteCount})</option>
+          <option value="favorites">Favorites ({favoriteCount})</option>
         </select>
       </div>
       
       <div className="filter-group">
-        <label>📊 Sort:</label>
+        <label>Sort:</label>
         <select 
           className="sort-select"
           value={sortBy}
@@ -493,7 +768,7 @@ function FilterControls({
       </div>
       
       <div className="filter-group">
-        <label>📅 Filter:</label>
+        <label>Filter:</label>
         <select 
           className="filter-select"
           value={filterBy}
@@ -510,7 +785,7 @@ function FilterControls({
 }
 
 // Komponen NoteInput untuk menambah catatan baru dengan design premium
-function NoteInput({ title, setTitle, body, setBody, addNote }) {
+function NoteInput({ title, setTitle, body, setBody, addNote, folders, selectedFolder, onSelectFolder }) {
   const maxTitleLength = 50;
   const remainingChars = maxTitleLength - title.length;
 
@@ -532,6 +807,21 @@ function NoteInput({ title, setTitle, body, setBody, addNote }) {
           <div className={`char-counter ${remainingChars <= 10 ? 'warning' : ''}`}>
             {remainingChars}/50
           </div>
+        </div>
+        <div className="input-group">
+          <label>📁 Add to folder:</label>
+          <select 
+            className="filter-select"
+            value={selectedFolder || ''}
+            onChange={(e) => onSelectFolder(e.target.value ? parseInt(e.target.value) : null)}
+          >
+            <option value="">No folder</option>
+            {folders.map(folder => (
+              <option key={folder.id} value={folder.id}>
+                {folder.name} ({folder.noteCount} notes)
+              </option>
+            ))}
+          </select>
         </div>
         <div className="input-group">
         <textarea
@@ -666,10 +956,10 @@ function MyNotesSection({
                   </button>
                   <button 
                     className="action-btn-commercial lock-btn" 
-                    onClick={() => onToggleLock(note.id)}
-                    title={lockedItems.has(note.id) ? 'Unlock note' : 'Lock note'}
+                    onClick={() => onToggleLock && onToggleLock(note.id)}
+                    title={lockedItems && lockedItems.has(note.id) ? 'Unlock note' : 'Lock note'}
                   >
-                    {lockedItems.has(note.id) ? '🔒' : '🔓'}
+                    {lockedItems && lockedItems.has(note.id) ? '🔒' : '🔓'}
                   </button>
           <button 
                     className="action-btn-commercial archive-btn" 
@@ -680,7 +970,7 @@ function MyNotesSection({
                   </button>
                   <button 
                     className="action-btn-commercial edit-btn" 
-                    onClick={() => onEdit(note.id)}
+                    onClick={() => onEdit(note)}
                     title="Edit note"
                   >
                     ✏️
@@ -738,7 +1028,7 @@ function NoteCard({
   isFavorite = false,
   isArchive = false,
   showMenu = false,
-  isLocked = false
+  isLocked = false,
 }) {
   const handleCardClick = (event) => {
     event.stopPropagation(); // Prevent event bubbling
@@ -754,6 +1044,7 @@ function NoteCard({
       className={`note-card ${note.archived ? 'archived' : ''} ${isCollapsed ? 'collapsed' : ''} ${isFavorite ? 'favorite' : ''}`}
       onClick={isArchive ? handleCardClick : undefined}
       style={{ cursor: isArchive ? 'pointer' : 'default' }}
+      data-note-id={note.id}
     >
       <div className="note-header">
         <h3 className="note-title">
@@ -761,39 +1052,11 @@ function NoteCard({
         </h3>
         <div className="note-actions" onClick={(e) => e.stopPropagation()}>
           <button 
-            className="action-btn favorite-btn" 
-            onClick={() => onToggleFavorite(note.id)}
-            title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          >
-            {isFavorite ? '❤️' : '🤍'}
-          </button>
-          <button 
-            className="action-btn lock-btn" 
-            onClick={() => onToggleLock(note.id)}
-            title={isLocked ? 'Unlock note' : 'Lock note'}
-          >
-            {isLocked ? '🔒' : '🔓'}
-          </button>
-          <button 
             className="action-btn archive-btn" 
             onClick={() => onArchive(note.id)}
             title={note.archived ? 'Activate note' : 'Archive note'}
           >
             {note.archived ? '📂' : '📝'}
-          </button>
-          <button 
-            className="action-btn edit-btn" 
-            onClick={() => onEdit(note.id)}
-            title="Edit note"
-          >
-            ✏️
-          </button>
-          <button 
-            className="action-btn delete-btn" 
-            onClick={() => onDelete(note.id)}
-            title="Delete note"
-          >
-            🗑️
           </button>
           <button 
             className="action-btn menu-btn" 
