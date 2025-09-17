@@ -39,7 +39,6 @@ function App() {
   const [editFolderName, setEditFolderName] = useState('');
   const [showFolderNotes, setShowFolderNotes] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
-  const [lockedItems, setLockedItems] = useState(new Set());
 
   // Apply theme
   React.useEffect(() => {
@@ -281,16 +280,6 @@ function App() {
     setFavorites(newFavorites);
   };
 
-  // Toggle lock note
-  const toggleLock = (id) => {
-    const newLockedItems = new Set(lockedItems);
-    if (newLockedItems.has(id)) {
-      newLockedItems.delete(id);
-    } else {
-      newLockedItems.add(id);
-    }
-    setLockedItems(newLockedItems);
-  };
 
   // Export notes as JSON
   const exportNotes = () => {
@@ -447,10 +436,8 @@ function App() {
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
             onToggleMenu={toggleMenu}
-            onToggleLock={toggleLock}
             favorites={favorites}
             showMenu={showMenu}
-            lockedItems={lockedItems}
             emptyMessage="No active notes yet"
             emptyIcon="📝"
             isArchive={false}
@@ -465,11 +452,9 @@ function App() {
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
             onToggleMenu={toggleMenu}
-            onToggleLock={toggleLock}
             expandedItems={expandedArchives}
             favorites={favorites}
             showMenu={showMenu}
-            lockedItems={lockedItems}
             emptyMessage="No archived notes yet"
             emptyIcon="📂"
             isArchive={true}
@@ -849,11 +834,9 @@ function NoteSection({
   onToggleFavorite,
   onEdit,
   onToggleMenu,
-  onToggleLock,
   expandedItems,
   favorites,
   showMenu,
-  lockedItems,
   emptyMessage, 
   emptyIcon,
   isArchive = false
@@ -887,12 +870,10 @@ function NoteSection({
               onToggleFavorite={onToggleFavorite}
               onEdit={onEdit}
               onToggleMenu={onToggleMenu}
-              onToggleLock={onToggleLock}
               isExpanded={expandedItems?.has(note.id)}
               isFavorite={favorites?.has(note.id)}
               isArchive={isArchive}
               showMenu={showMenu?.has(note.id)}
-              isLocked={lockedItems?.has(note.id)}
             />
           ))}
         </div>
@@ -910,10 +891,8 @@ function MyNotesSection({
   onToggleFavorite,
   onEdit,
   onToggleMenu,
-  onToggleLock,
   favorites,
   showMenu,
-  lockedItems,
   emptyMessage, 
   emptyIcon,
   isArchive = false
@@ -953,13 +932,6 @@ function MyNotesSection({
                     title={favorites.has(note.id) ? 'Remove from favorites' : 'Add to favorites'}
                   >
                     {favorites.has(note.id) ? '❤️' : '🤍'}
-                  </button>
-                  <button 
-                    className="action-btn-commercial lock-btn" 
-                    onClick={() => onToggleLock && onToggleLock(note.id)}
-                    title={lockedItems && lockedItems.has(note.id) ? 'Unlock note' : 'Lock note'}
-                  >
-                    {lockedItems && lockedItems.has(note.id) ? '🔒' : '🔓'}
                   </button>
           <button 
                     className="action-btn-commercial archive-btn" 
@@ -1023,12 +995,10 @@ function NoteCard({
   onToggleFavorite,
   onEdit,
   onToggleMenu,
-  onToggleLock,
   isExpanded = true,
   isFavorite = false,
   isArchive = false,
   showMenu = false,
-  isLocked = false,
 }) {
   const handleCardClick = (event) => {
     event.stopPropagation(); // Prevent event bubbling
@@ -1107,50 +1077,24 @@ function NoteCard({
   );
 }
 
-// Professional Footer
+// Simple Footer
 function Footer() {
   return (
     <footer className="app-footer">
       <div className="footer-content">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <div className="footer-logo">
-              <div className="logo-icon">N</div>
-              <span>Noto</span>
-            </div>
-            <p className="footer-tagline">
-              The most beautiful notes app for the modern digital generation
-            </p>
+        <div className="footer-brand">
+          <div className="footer-logo">
+            <div className="logo-icon">N</div>
+            <span>Noto</span>
           </div>
-          
-          <div className="footer-links">
-            <div className="footer-section">
-              <h4>Developer</h4>
-              <p>Surya Hanjaya</p>
-              <p>AI Researcher • Full-Stack Developer</p>
-              <p>Informatics Engineering '23</p>
-            </div>
-            
-            <div className="footer-section">
-              <h4>Connect</h4>
-              <div className="social-links">
-                <a href="https://www.linkedin.com/in/surya-hanjaya/" target="_blank" rel="noopener noreferrer" className="social-link linkedin">
-                  LinkedIn
-                </a>
-                <a href="https://github.com/suryahanjaya?tab=repositories" target="_blank" rel="noopener noreferrer" className="social-link github">
-                  GitHub
-                </a>
-                <a href="https://www.instagram.com/h4njy/" target="_blank" rel="noopener noreferrer" className="social-link instagram">
-                  Instagram
-                </a>
-              </div>
-            </div>
-          </div>
+          <p className="footer-tagline">
+            Simple notes app for modern productivity
+          </p>
         </div>
         
         <div className="footer-bottom">
           <p className="copyright">
-            © 2025 Noto. Built with modern web technologies and innovative design.
+            © 2025 Noto. Made with ❤️
           </p>
         </div>
       </div>
