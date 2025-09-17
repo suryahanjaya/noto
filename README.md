@@ -87,5 +87,3 @@ Setiap catatan memiliki struktur:
 - Styling yang modern dan clean
 
 ---
-
-Dibuat dengan ❤️ menggunakan React
