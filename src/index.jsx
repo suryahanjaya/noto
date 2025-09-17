@@ -215,14 +215,13 @@ function App() {
         darkMode={darkMode}
         setDarkMode={setDarkMode}
         onExport={exportNotes}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
       />
       
       <div className="app">
         <main className="app-main">
-        <SearchBar 
-          searchKeyword={searchKeyword}
-          setSearchKeyword={setSearchKeyword}
-        />
+        <RecentFoldersSection />
         
         <NoteInput 
           title={title}
@@ -260,8 +259,8 @@ function App() {
           favoriteCount={favorites.size}
         />
           
-          <NoteSection 
-            title="📋 Active Notes"
+          <MyNotesSection 
+            title="My Notes"
             notes={activeNotes}
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
@@ -300,32 +299,36 @@ function App() {
 }
 
 // Komponen Header dengan branding Noto dan dark mode toggle
-function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport }) {
+function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport, searchKeyword, setSearchKeyword }) {
   return (
     <header className="app-header">
       <div className="header-content">
-        <div className="logo">
-          <div className="logo-icon">N</div>
-          <div className="logo-text">Noto</div>
-        </div>
-        <div className="header-actions">
-          <div className="stats-badge">
-            {totalNotes} Total • {activeNotes} Active
+        <div className="header-left">
+          <div className="logo">
+            <div className="logo-icon">N</div>
+            <div className="logo-text">MY NOTES</div>
           </div>
-          <button 
-            className="theme-toggle"
-            onClick={onExport}
-            title="Export notes as JSON"
-          >
-            📥
-          </button>
-          <button 
-            className="theme-toggle"
-            onClick={() => setDarkMode(!darkMode)}
-            title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {darkMode ? '☀️' : '🌙'}
-          </button>
+        </div>
+        
+        <div className="header-center">
+          <div className="search-container">
+            <div className="search-icon">🔍</div>
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              className="search-input"
+            />
+          </div>
+        </div>
+        
+        <div className="header-right">
+          <div className="user-info">
+            <span className="user-name">Sayef mahmud</span>
+            <div className="user-avatar">👤</div>
+            <button className="menu-btn">☰</button>
+          </div>
         </div>
       </div>
     </header>
@@ -345,6 +348,59 @@ function SearchBar({ searchKeyword, setSearchKeyword }) {
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
           />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Komponen RecentFoldersSection
+function RecentFoldersSection() {
+  const [activeFilter, setActiveFilter] = useState('This Week');
+  
+  const folders = [
+    { id: 1, name: 'Movie Review', date: '12/12/2021', color: 'blue', icon: '📄' },
+    { id: 2, name: 'Class Notes', date: '12/12/2021', color: 'pink', icon: '📄' },
+    { id: 3, name: 'Book Lists', date: '12/12/2021', color: 'yellow', icon: '📄' },
+  ];
+  
+  const filters = ['Todays', 'This Week', 'This Month'];
+  
+  return (
+    <section className="recent-folders-section">
+      <div className="section-header">
+        <h2>Recent Folders</h2>
+        <div className="filter-tabs">
+          {filters.map(filter => (
+            <button
+              key={filter}
+              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
+              onClick={() => setActiveFilter(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <div className="folders-grid">
+        {folders.map(folder => (
+          <div key={folder.id} className={`folder-card ${folder.color}`}>
+            <div className="folder-header">
+              <div className="folder-icon">{folder.icon}</div>
+              <button className="folder-menu">⋯</button>
+            </div>
+            <div className="folder-content">
+              <h3>{folder.name}</h3>
+              <p>{folder.date}</p>
+            </div>
+          </div>
+        ))}
+        <div className="folder-card new-folder">
+          <div className="new-folder-content">
+            <div className="new-folder-icon">📁</div>
+            <span>New folder</span>
+          </div>
         </div>
       </div>
     </section>
@@ -497,6 +553,109 @@ function NoteSection({
               showMenu={showMenu?.has(note.id)}
             />
           ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+// Komponen MyNotesSection dengan date navigation
+function MyNotesSection({ 
+  title, 
+  notes, 
+  onDelete, 
+  onArchive, 
+  onToggleFavorite,
+  onEdit,
+  onToggleMenu,
+  favorites,
+  showMenu,
+  emptyMessage, 
+  emptyIcon,
+  isArchive = false
+}) {
+  const [activeFilter, setActiveFilter] = useState('Todays');
+  const [currentDate, setCurrentDate] = useState(new Date());
+  
+  const filters = ['Todays', 'This Week', 'This Month'];
+  
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
+  
+  const getNoteColor = (index) => {
+    const colors = ['yellow', 'pink', 'blue'];
+    return colors[index % colors.length];
+  };
+  
+  return (
+    <section className="my-notes-section">
+      <div className="section-header">
+        <h2 className="section-title">{title}</h2>
+        <div className="filter-tabs">
+          {filters.map(filter => (
+            <button
+              key={filter}
+              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
+              onClick={() => setActiveFilter(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <div className="date-navigation">
+        <button className="date-nav-btn">◀</button>
+        <span className="current-date">{formatDate(currentDate)}</span>
+        <button className="date-nav-btn">▶</button>
+      </div>
+      
+      {notes.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-icon">{emptyIcon}</div>
+          <p className="empty-message">{emptyMessage}</p>
+        </div>
+      ) : (
+        <div className="notes-grid">
+          {notes.map((note, index) => (
+            <div key={note.id} className={`note-card-commercial ${getNoteColor(index)}`}>
+              <div className="note-header-commercial">
+                <span className="note-date-commercial">
+                  {new Date(note.createdAt).toLocaleDateString('en-US', { 
+                    month: '2-digit', 
+                    day: '2-digit', 
+                    year: 'numeric' 
+                  })}
+                </span>
+                <button className="edit-btn-commercial" onClick={() => onEdit(note.id)}>
+                  ✏️
+                </button>
+              </div>
+              
+              <h3 className="note-title-commercial">{note.title}</h3>
+              
+              <div className="note-body-commercial">
+                {note.body.length > 150 ? `${note.body.substring(0, 150)}...` : note.body}
+              </div>
+              
+              <div className="note-footer-commercial">
+                <span className="note-time">
+                  🕐 {new Date(note.createdAt).toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    hour12: true 
+                  })}, {new Date(note.createdAt).toLocaleDateString('en-US', { weekday: 'long' })}
+                </span>
+              </div>
+            </div>
+          ))}
+          <div className="note-card-commercial new-note">
+            <div className="new-note-content">
+              <div className="new-note-icon">📄</div>
+              <span>New Note</span>
+            </div>
+          </div>
         </div>
       )}
     </section>
