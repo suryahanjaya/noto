@@ -56,72 +56,100 @@ function App() {
   const archivedNotes = filteredNotes.filter(note => note.archived);
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>Aplikasi Catatan Pribadi</h1>
-      </header>
+    <>
+      <Header totalNotes={notes.length} activeNotes={activeNotes.length} />
       
-      <main className="app-main">
-        <SearchBar 
-          searchKeyword={searchKeyword}
-          setSearchKeyword={setSearchKeyword}
-        />
-        
-        <NoteInput 
-          title={title}
-          setTitle={setTitle}
-          body={body}
-          setBody={setBody}
-          addNote={addNote}
-        />
-        
-        <NoteList 
-          title="Catatan Aktif"
-          notes={activeNotes}
-          onDelete={deleteNote}
-          onArchive={toggleArchiveNote}
-          emptyMessage="Tidak ada catatan aktif"
-        />
-        
-        <NoteList 
-          title="Catatan Arsip"
-          notes={archivedNotes}
-          onDelete={deleteNote}
-          onArchive={toggleArchiveNote}
-          emptyMessage="Tidak ada catatan diarsipkan"
-        />
-      </main>
-    </div>
+      <div className="app">
+        <main className="app-main">
+          <SearchBar 
+            searchKeyword={searchKeyword}
+            setSearchKeyword={setSearchKeyword}
+          />
+          
+          <NoteInput 
+            title={title}
+            setTitle={setTitle}
+            body={body}
+            setBody={setBody}
+            addNote={addNote}
+          />
+          
+          <NoteSection 
+            title="📝 Catatan Aktif"
+            notes={activeNotes}
+            onDelete={deleteNote}
+            onArchive={toggleArchiveNote}
+            emptyMessage="Belum ada catatan aktif"
+            emptyIcon="📝"
+          />
+          
+          <NoteSection 
+            title="📂 Catatan Arsip"
+            notes={archivedNotes}
+            onDelete={deleteNote}
+            onArchive={toggleArchiveNote}
+            emptyMessage="Belum ada catatan diarsipkan"
+            emptyIcon="📂"
+          />
+        </main>
+      </div>
+      
+      <Footer />
+    </>
   );
 }
 
-// Komponen SearchBar untuk pencarian
+// Komponen Header dengan branding Noto
+function Header({ totalNotes, activeNotes }) {
+  return (
+    <header className="app-header">
+      <div className="header-content">
+        <div className="logo">
+          <div className="logo-icon">N</div>
+          <div className="logo-text">Noto</div>
+        </div>
+        <div className="header-actions">
+          <div className="stats-badge">
+            {totalNotes} Total • {activeNotes} Aktif
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// Komponen SearchBar untuk pencarian dengan glass effect
 function SearchBar({ searchKeyword, setSearchKeyword }) {
   return (
-    <div className="search-bar">
-      <input
-        type="text"
-        placeholder="Cari catatan..."
-        value={searchKeyword}
-        onChange={(e) => setSearchKeyword(e.target.value)}
-      />
-    </div>
+    <section className="search-section">
+      <div className="search-container">
+        <div className="search-bar">
+          <div className="search-icon">🔍</div>
+          <input
+            type="text"
+            placeholder="Cari catatan berdasarkan judul..."
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+        </div>
+      </div>
+    </section>
   );
 }
 
-// Komponen NoteInput untuk menambah catatan baru
+// Komponen NoteInput untuk menambah catatan baru dengan design premium
 function NoteInput({ title, setTitle, body, setBody, addNote }) {
   const maxTitleLength = 50;
   const remainingChars = maxTitleLength - title.length;
 
   return (
-    <div className="note-input">
-      <h2>Tambah Catatan Baru</h2>
-      <form onSubmit={addNote}>
+    <section className="note-input glass-card">
+      <h2>Buat Catatan Baru</h2>
+      <form className="note-form" onSubmit={addNote}>
         <div className="input-group">
           <input
             type="text"
-            placeholder="Judul catatan..."
+            placeholder="Judul catatan yang menarik..."
             value={title}
             onChange={(e) => {
               if (e.target.value.length <= maxTitleLength) {
@@ -129,31 +157,49 @@ function NoteInput({ title, setTitle, body, setBody, addNote }) {
               }
             }}
           />
-          <span className="char-limit">Sisa karakter: {remainingChars}</span>
+          <div className={`char-counter ${remainingChars <= 10 ? 'warning' : ''}`}>
+            {remainingChars}/50
+          </div>
         </div>
-        <textarea
-          placeholder="Isi catatan..."
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          rows="5"
-        ></textarea>
-        <button type="submit">Tambah</button>
+        <div className="input-group">
+          <textarea
+            placeholder="Tulis isi catatan Anda di sini..."
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            rows="4"
+          />
+        </div>
+        <button type="submit" className="submit-btn">
+          ✨ Simpan Catatan
+        </button>
       </form>
-    </div>
+    </section>
   );
 }
 
-// Komponen NoteList untuk menampilkan daftar catatan
-function NoteList({ title, notes, onDelete, onArchive, emptyMessage }) {
+// Komponen NoteSection untuk menampilkan section catatan dengan design modern
+function NoteSection({ title, notes, onDelete, onArchive, emptyMessage, emptyIcon }) {
   return (
-    <div className="note-list">
-      <h2>{title}</h2>
+    <section className="notes-section">
+      <div className="section-header">
+        <h2 className="section-title">
+          {title}
+        </h2>
+        <div className="section-count">
+          {notes.length}
+        </div>
+      </div>
+      
       {notes.length === 0 ? (
-        <p className="empty-message">{emptyMessage}</p>
+        <div className="empty-state">
+          <div className="empty-icon">{emptyIcon}</div>
+          <h3 className="empty-title">Belum Ada Catatan</h3>
+          <p className="empty-message">{emptyMessage}</p>
+        </div>
       ) : (
-        <div className="notes-container">
+        <div className="notes-grid">
           {notes.map(note => (
-            <NoteItem
+            <NoteCard
               key={note.id}
               note={note}
               onDelete={onDelete}
@@ -162,36 +208,60 @@ function NoteList({ title, notes, onDelete, onArchive, emptyMessage }) {
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
-// Komponen NoteItem untuk menampilkan setiap catatan
-function NoteItem({ note, onDelete, onArchive }) {
+// Komponen NoteCard untuk menampilkan setiap catatan dengan design premium
+function NoteCard({ note, onDelete, onArchive }) {
   return (
-    <div className="note-item">
+    <article className={`note-card ${note.archived ? 'archived' : ''}`}>
       <div className="note-header">
-        <h3>{note.title}</h3>
+        <h3 className="note-title">{note.title}</h3>
         <div className="note-actions">
           <button 
-            className="archive-btn" 
+            className="action-btn archive-btn" 
             onClick={() => onArchive(note.id)}
+            title={note.archived ? 'Aktifkan catatan' : 'Arsipkan catatan'}
           >
-            {note.archived ? 'Aktifkan' : 'Arsipkan'}
+            {note.archived ? '📂' : '📝'}
           </button>
           <button 
-            className="delete-btn" 
+            className="action-btn delete-btn" 
             onClick={() => onDelete(note.id)}
+            title="Hapus catatan"
           >
-            Hapus
+            🗑️
           </button>
         </div>
       </div>
-      <p className="note-date">
+      
+      <div className="note-date">
         {showFormattedDate(note.createdAt)}
-      </p>
-      <p className="note-body">{note.body}</p>
-    </div>
+      </div>
+      
+      <div className="note-body">{note.body}</div>
+    </article>
+  );
+}
+
+// Komponen Footer dengan branding Noto
+function Footer() {
+  return (
+    <footer className="app-footer">
+      <div className="footer-content">
+        <div className="footer-logo">Noto</div>
+        <p className="footer-text">
+          Aplikasi catatan pribadi yang elegan dan powerful untuk Gen Z
+        </p>
+        <div className="footer-links">
+          <a href="#" className="footer-link">Privacy</a>
+          <a href="#" className="footer-link">Terms</a>
+          <a href="#" className="footer-link">Support</a>
+          <a href="#" className="footer-link">About</a>
+        </div>
+      </div>
+    </footer>
   );
 }
 
