@@ -352,7 +352,7 @@ body::after {
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -410,20 +410,22 @@ body::after {
 .search-input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 1px solid var(--glass-border);
+  border: 2px solid var(--accent);
   border-radius: 25px;
-  background: var(--glass-bg);
+  background: var(--surface);
   backdrop-filter: var(--glass-blur);
   font-size: 0.9rem;
   transition: all 0.3s ease;
   color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(103, 174, 110, 0.2);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: var(--accent);
-  background: var(--surface);
-  box-shadow: var(--glass-shadow);
+  border-color: var(--primary);
+  background: var(--surface-elevated);
+  box-shadow: 0 6px 20px rgba(50, 142, 110, 0.3);
+  transform: translateY(-1px);
 }
 
 /* User Info */
@@ -1932,7 +1934,7 @@ body::after {
     flex-direction: column;
     gap: 0.75rem;
     text-align: center;
-    padding: 0 1rem;
+    padding: 0 0.5rem;
   }
   
   .logo {
@@ -2202,7 +2204,7 @@ body::after {
   }
   
   .header-content {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
   }
   
   .notes-grid {
