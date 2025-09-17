@@ -228,16 +228,20 @@ function App() {
           addNote={addNote}
         />
 
-        {/* Edit Form */}
+        {/* Edit Modal */}
         {editingNote && (
-          <EditNoteForm
-            editTitle={editTitle}
-            setEditTitle={setEditTitle}
-            editBody={editBody}
-            setEditBody={setEditBody}
-            saveEditNote={saveEditNote}
-            cancelEdit={cancelEdit}
-          />
+          <div className="edit-modal-overlay" onClick={cancelEdit}>
+            <div className="edit-modal" onClick={(e) => e.stopPropagation()}>
+              <EditNoteForm
+                editTitle={editTitle}
+                setEditTitle={setEditTitle}
+                editBody={editBody}
+                setEditBody={setEditBody}
+                saveEditNote={saveEditNote}
+                cancelEdit={cancelEdit}
+              />
+            </div>
+          </div>
         )}
         
         <FilterControls 
@@ -663,7 +667,7 @@ function EditNoteForm({
   const remainingChars = maxTitleLength - editTitle.length;
 
   return (
-    <section className="note-input glass-card edit-form">
+    <section className="note-input glass-card">
       <h2>✏️ Edit Note</h2>
       <form className="note-form" onSubmit={saveEditNote}>
         <div className="input-group">
