@@ -471,9 +471,52 @@ body::after {
   color: #333;
 }
 
+/* Side by Side Layout */
+.side-by-side-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.left-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Note Input in Side Layout */
+.left-section .note-input {
+  margin-bottom: 0;
+}
+
+.left-section .note-input h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.left-section .note-form {
+  gap: 1rem;
+}
+
+.left-section .note-form input,
+.left-section .note-form textarea {
+  font-size: 0.9rem;
+  padding: 0.75rem;
+}
+
+.left-section .submit-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+}
+
 /* Recent Folders Section */
 .recent-folders-section {
-  margin-bottom: 3rem;
+  margin-bottom: 0;
 }
 
 .recent-folders-section .section-header {
@@ -526,8 +569,8 @@ body::after {
 
 .folders-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
 }
 
 .folder-card {
@@ -2399,6 +2442,11 @@ body::after {
   
   .user-info {
     justify-content: center;
+  }
+  
+  .side-by-side-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
   
   .folders-grid {

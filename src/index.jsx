@@ -241,19 +241,25 @@ function App() {
       
       <div className="app">
         <main className="app-main">
-        <RecentFoldersSection 
-          onFolderClick={openFolderPopup}
-          lockedItems={lockedItems}
-          onToggleLock={toggleLock}
-        />
-        
-        <NoteInput 
-          title={title}
-          setTitle={setTitle}
-          body={body}
-          setBody={setBody}
-          addNote={addNote}
-        />
+        <div className="side-by-side-layout">
+          <div className="left-section">
+            <NoteInput 
+              title={title}
+              setTitle={setTitle}
+              body={body}
+              setBody={setBody}
+              addNote={addNote}
+            />
+          </div>
+          
+          <div className="right-section">
+            <RecentFoldersSection 
+              onFolderClick={openFolderPopup}
+              lockedItems={lockedItems}
+              onToggleLock={toggleLock}
+            />
+          </div>
+        </div>
 
         {/* Edit Modal */}
         {editingNote && (
