@@ -20,6 +20,9 @@ function App() {
   const [expandedArchives, setExpandedArchives] = useState(new Set());
   const [favorites, setFavorites] = useState(new Set());
   const [selectedTag, setSelectedTag] = useState('all');
+  const [editingNote, setEditingNote] = useState(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
 
   // Apply theme
   React.useEffect(() => {
@@ -48,6 +51,37 @@ function App() {
   // Fungsi untuk menghapus catatan
   const deleteNote = (id) => {
     setNotes(notes.filter(note => note.id !== id));
+  };
+
+  // Fungsi untuk memulai edit catatan
+  const startEditNote = (note) => {
+    setEditingNote(note.id);
+    setEditTitle(note.title);
+    setEditBody(note.body);
+  };
+
+  // Fungsi untuk menyimpan edit catatan
+  const saveEditNote = (e) => {
+    e.preventDefault();
+    
+    if (editTitle.trim() === '' || editBody.trim() === '') return;
+    
+    setNotes(notes.map(note => 
+      note.id === editingNote 
+        ? { ...note, title: editTitle.trim(), body: editBody.trim() }
+        : note
+    ));
+    
+    setEditingNote(null);
+    setEditTitle('');
+    setEditBody('');
+  };
+
+  // Fungsi untuk membatalkan edit
+  const cancelEdit = () => {
+    setEditingNote(null);
+    setEditTitle('');
+    setEditBody('');
   };
 
   // Fungsi untuk mengarsipkan/mengaktifkan catatan
@@ -181,6 +215,18 @@ function App() {
           setBody={setBody}
           addNote={addNote}
         />
+
+        {/* Edit Form */}
+        {editingNote && (
+          <EditNoteForm
+            editTitle={editTitle}
+            setEditTitle={setEditTitle}
+            editBody={editBody}
+            setEditBody={setEditBody}
+            saveEditNote={saveEditNote}
+            cancelEdit={cancelEdit}
+          />
+        )}
         
         <FilterControls 
           sortBy={sortBy}
@@ -198,6 +244,7 @@ function App() {
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
             onToggleFavorite={toggleFavorite}
+            onEdit={startEditNote}
             favorites={favorites}
             emptyMessage="No active notes yet"
             emptyIcon="📝"
@@ -211,6 +258,7 @@ function App() {
             onArchive={toggleArchiveNote}
             onToggleExpand={toggleExpandArchive}
             onToggleFavorite={toggleFavorite}
+            onEdit={startEditNote}
             expandedItems={expandedArchives}
             favorites={favorites}
             emptyMessage="No archived notes yet"
@@ -379,6 +427,7 @@ function NoteSection({
   onArchive, 
   onToggleExpand,
   onToggleFavorite,
+  onEdit,
   expandedItems,
   favorites,
   emptyMessage, 
@@ -412,6 +461,7 @@ function NoteSection({
               onArchive={onArchive}
               onToggleExpand={onToggleExpand}
               onToggleFavorite={onToggleFavorite}
+              onEdit={onEdit}
               isExpanded={expandedItems?.has(note.id)}
               isFavorite={favorites?.has(note.id)}
               isArchive={isArchive}
@@ -430,6 +480,7 @@ function NoteCard({
   onArchive, 
   onToggleExpand,
   onToggleFavorite,
+  onEdit,
   isExpanded = true,
   isFavorite = false,
   isArchive = false 
@@ -445,7 +496,7 @@ function NoteCard({
 
   return (
     <article 
-      className={`note-card ${note.archived ? 'archived' : ''} ${isCollapsed ? 'collapsed' : ''}`}
+      className={`note-card ${note.archived ? 'archived' : ''} ${isCollapsed ? 'collapsed' : ''} ${isFavorite ? 'favorite' : ''}`}
       onClick={isArchive ? handleCardClick : undefined}
       style={{ cursor: isArchive ? 'pointer' : 'default' }}
     >
@@ -460,6 +511,13 @@ function NoteCard({
             title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             {isFavorite ? '❤️' : '🤍'}
+          </button>
+          <button 
+            className="action-btn edit-btn" 
+            onClick={() => onEdit(note)}
+            title="Edit note"
+          >
+            ✏️
           </button>
           <button 
             className="action-btn archive-btn" 
@@ -563,6 +621,61 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+// Komponen EditNoteForm untuk mengedit catatan
+function EditNoteForm({ 
+  editTitle, 
+  setEditTitle, 
+  editBody, 
+  setEditBody, 
+  saveEditNote, 
+  cancelEdit 
+}) {
+  const maxTitleLength = 50;
+  const remainingChars = maxTitleLength - editTitle.length;
+
+  return (
+    <section className="note-input glass-card edit-form">
+      <h2>✏️ Edit Note</h2>
+      <form className="note-form" onSubmit={saveEditNote}>
+        <div className="input-group">
+          <input
+            type="text"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            placeholder="Note title..."
+            className="title-input"
+            maxLength={maxTitleLength}
+            required
+          />
+          <div className="char-counter">
+            {remainingChars} characters remaining
+          </div>
+        </div>
+        
+        <div className="input-group">
+          <textarea
+            value={editBody}
+            onChange={(e) => setEditBody(e.target.value)}
+            placeholder="Write your note here..."
+            className="body-input"
+            rows="4"
+            required
+          />
+        </div>
+        
+        <div className="form-actions">
+          <button type="button" className="btn btn-secondary" onClick={cancelEdit}>
+            Cancel
+          </button>
+          <button type="submit" className="btn btn-primary">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </section>
   );
 }
 
