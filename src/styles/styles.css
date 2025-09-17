@@ -737,6 +737,7 @@ body::after {
   color: var(--text-tertiary);
   opacity: 0;
   transition: opacity var(--transition-normal);
+  pointer-events: none;
 }
 
 .note-card.archived.collapsed:hover {
@@ -769,11 +770,36 @@ body::after {
   color: var(--text-primary);
 }
 
+.note-card.archived.collapsed .note-title::after {
+  content: none !important;
+}
+
+.note-card.archived.collapsed .note-title::before {
+  content: none !important;
+}
+
 .note-card.archived.collapsed .note-actions {
   position: absolute;
   right: 1.5rem;
   top: 50%;
   transform: translateY(-50%);
+}
+
+/* Ensure no expand indicators anywhere */
+.note-card.archived.collapsed *::after {
+  content: none !important;
+}
+
+.note-card.archived.collapsed *::before {
+  content: none !important;
+}
+
+.note-card.archived.collapsed .note-title *::after {
+  content: none !important;
+}
+
+.note-card.archived.collapsed .note-title *::before {
+  content: none !important;
 }
 
 
