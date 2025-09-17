@@ -235,20 +235,18 @@ function App() {
         darkMode={darkMode}
         setDarkMode={setDarkMode}
         onExport={exportNotes}
-        searchKeyword={searchKeyword}
-        setSearchKeyword={setSearchKeyword}
-      />
-      
+        />
+        
       <div className="app">
         <main className="app-main">
         <div className="side-by-side-layout">
           <div className="left-section">
-            <NoteInput 
-              title={title}
-              setTitle={setTitle}
-              body={body}
-              setBody={setBody}
-              addNote={addNote}
+        <NoteInput 
+          title={title}
+          setTitle={setTitle}
+          body={body}
+          setBody={setBody}
+          addNote={addNote}
             />
           </div>
           
@@ -287,13 +285,15 @@ function App() {
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
           favoriteCount={favorites.size}
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
         />
           
           <MyNotesSection 
             title="My Notes"
-            notes={activeNotes}
-            onDelete={deleteNote}
-            onArchive={toggleArchiveNote}
+          notes={activeNotes}
+          onDelete={deleteNote}
+          onArchive={toggleArchiveNote}
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
             onToggleMenu={toggleMenu}
@@ -308,9 +308,9 @@ function App() {
           
           <NoteSection 
             title="🗃️ Archived Notes"
-            notes={archivedNotes}
-            onDelete={deleteNote}
-            onArchive={toggleArchiveNote}
+          notes={archivedNotes}
+          onDelete={deleteNote}
+          onArchive={toggleArchiveNote}
             onToggleExpand={toggleExpandArchive}
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
@@ -323,9 +323,9 @@ function App() {
             emptyMessage="No archived notes yet"
             emptyIcon="📂"
             isArchive={true}
-          />
-        </main>
-      </div>
+        />
+      </main>
+    </div>
       
       {/* Folder Popup Modal */}
       {showFolderPopup && (
@@ -348,43 +348,29 @@ function App() {
 }
 
 // Komponen Header dengan branding Noto dan dark mode toggle
-function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport, searchKeyword, setSearchKeyword }) {
+function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport }) {
   return (
     <header className="app-header">
       <div className="header-content">
-        <div className="header-left">
-          <div className="logo">
-            <div className="logo-icon">N</div>
-            <div className="search-container">
-              <div className="search-icon">🔍</div>
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-                className="search-input"
-              />
-            </div>
-          </div>
+        <div className="logo">
+          <div className="logo-icon">N</div>
         </div>
         
-        <div className="header-right">
-          <div className="header-actions">
-            <button 
-              className="theme-toggle"
-              onClick={() => setDarkMode(!darkMode)}
-              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {darkMode ? '☀️' : '🌙'}
-            </button>
-            <button 
-              className="theme-toggle"
-              onClick={onExport}
-              title="Export notes as JSON"
-            >
-              📥
-            </button>
-          </div>
+        <div className="header-actions">
+          <button 
+            className="theme-toggle"
+            onClick={() => setDarkMode(!darkMode)}
+            title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
+          <button 
+            className="theme-toggle"
+            onClick={onExport}
+            title="Export notes as JSON"
+          >
+            📥
+          </button>
         </div>
       </div>
     </header>
@@ -462,10 +448,25 @@ function FilterControls({
   setFilterBy, 
   selectedTag, 
   setSelectedTag, 
-  favoriteCount 
+  favoriteCount,
+  searchKeyword,
+  setSearchKeyword
 }) {
   return (
     <section className="filter-controls">
+      <div className="filter-group">
+        <div className="search-container">
+          <div className="search-icon">🔍</div>
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            className="search-input"
+          />
+        </div>
+      </div>
+      
       <div className="filter-group">
         <label>🏷️ Tags:</label>
         <select 
@@ -533,10 +534,10 @@ function NoteInput({ title, setTitle, body, setBody, addNote }) {
           </div>
         </div>
         <div className="input-group">
-          <textarea
+        <textarea
             placeholder="Write your note content here..."
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
             rows="4"
           />
         </div>
@@ -582,7 +583,7 @@ function NoteSection({
         <div className="empty-state">
           <div className="empty-icon">{emptyIcon}</div>
           <h3 className="empty-title">No Notes Yet</h3>
-          <p className="empty-message">{emptyMessage}</p>
+        <p className="empty-message">{emptyMessage}</p>
         </div>
       ) : (
         <div className="notes-grid">
@@ -627,15 +628,6 @@ function MyNotesSection({
   emptyIcon,
   isArchive = false
 }) {
-  const [activeFilter, setActiveFilter] = useState('Todays');
-  const [currentDate, setCurrentDate] = useState(new Date());
-  
-  const filters = ['Todays', 'This Week', 'This Month'];
-  
-  const formatDate = (date) => {
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  };
-  
   const getNoteColor = (index) => {
     const colors = ['yellow', 'pink', 'blue'];
     return colors[index % colors.length];
@@ -645,23 +637,6 @@ function MyNotesSection({
     <section className="my-notes-section">
       <div className="section-header">
         <h2 className="section-title">{title}</h2>
-        <div className="filter-tabs">
-          {filters.map(filter => (
-            <button
-              key={filter}
-              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-      </div>
-      
-      <div className="date-navigation">
-        <button className="date-nav-btn">◀</button>
-        <span className="current-date">{formatDate(currentDate)}</span>
-        <button className="date-nav-btn">▶</button>
       </div>
       
       {notes.length === 0 ? (
@@ -696,9 +671,9 @@ function MyNotesSection({
                   >
                     {lockedItems.has(note.id) ? '🔒' : '🔓'}
                   </button>
-                  <button 
+          <button 
                     className="action-btn-commercial archive-btn" 
-                    onClick={() => onArchive(note.id)}
+            onClick={() => onArchive(note.id)}
                     title={note.archived ? 'Activate note' : 'Archive note'}
                   >
                     {note.archived ? '📂' : '📝'}
@@ -709,16 +684,16 @@ function MyNotesSection({
                     title="Edit note"
                   >
                     ✏️
-                  </button>
-                  <button 
+          </button>
+          <button 
                     className="action-btn-commercial delete-btn" 
-                    onClick={() => onDelete(note.id)}
+            onClick={() => onDelete(note.id)}
                     title="Delete note"
-                  >
+          >
                     🗑️
-                  </button>
-                </div>
-              </div>
+          </button>
+        </div>
+      </div>
               
               <h3 className="note-title-commercial">{note.title}</h3>
               
@@ -983,7 +958,7 @@ function EditNoteForm({
           <button type="submit" className="btn btn-primary">
             Save Changes
           </button>
-        </div>
+    </div>
       </form>
     </section>
   );

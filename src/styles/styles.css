@@ -354,15 +354,17 @@ body::after {
   margin: 0 auto;
   padding: 0 1rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: 2rem;
+  width: 100%;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: flex-start;
 }
 
 .logo-icon {
@@ -381,21 +383,16 @@ body::after {
 
 
 /* Header Sections */
-.header-left {
+.header-actions {
   display: flex;
   align-items: center;
-}
-
-
-.header-right {
-  display: flex;
-  justify-content: flex-end;
+  gap: 1rem;
 }
 
 /* Search Container */
 .search-container {
   position: relative;
-  width: 300px;
+  width: 250px;
 }
 
 .search-icon {
@@ -543,39 +540,6 @@ body::after {
   margin: 0;
 }
 
-.filter-tabs {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.filter-tab {
-  padding: 0.5rem 1rem;
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  cursor: pointer;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.filter-tab.active {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.filter-tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 1px;
-}
 
 .folders-grid {
   display: grid;
@@ -693,7 +657,7 @@ body::after {
 
 .my-notes-section .section-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 1.5rem;
 }
@@ -705,41 +669,6 @@ body::after {
   margin: 0;
 }
 
-.date-navigation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  box-shadow: var(--glass-shadow);
-}
-
-.date-nav-btn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  color: #666;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-.date-nav-btn:hover {
-  background: #f8f9fa;
-  color: #333;
-}
-
-.current-date {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
 
 .notes-grid {
   display: grid;
@@ -1042,7 +971,7 @@ body::after {
 .filter-controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   margin: 1rem 0;
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.15);
@@ -1059,6 +988,10 @@ body::after {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.filter-group:first-child {
+  gap: 0;
 }
 
 .filter-select,
@@ -1251,11 +1184,6 @@ body::after {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.note-input h2::before {
-  content: '✍️';
-  font-size: 1.25rem;
 }
 
 .note-form {
