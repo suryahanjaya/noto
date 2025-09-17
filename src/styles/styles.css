@@ -11,23 +11,23 @@
   --accent: #34D399;
   --info: #06B6D4;
   
-  /* Light Mode - Ultra Clean */
-  --bg-primary: #FAFAFA;
-  --bg-secondary: #F5F5F5;
+  /* Light Mode - Premium Green Tinted */
+  --bg-primary: #F0FDF4;
+  --bg-secondary: #ECFDF5;
   --bg-tertiary: #FFFFFF;
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-tertiary: #94A3B8;
-  --text-muted: #CBD5E1;
-  --border: #E2E8F0;
-  --border-light: #F1F5F9;
+  --text-primary: #064E3B;
+  --text-secondary: #047857;
+  --text-tertiary: #059669;
+  --text-muted: #6EE7B7;
+  --border: #A7F3D0;
+  --border-light: #D1FAE5;
   --surface: #FFFFFF;
-  --surface-elevated: #FFFFFF;
+  --surface-elevated: #F9FFFE;
   
   /* Glass Effect - Enhanced */
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.04);
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(167, 243, 208, 0.3);
+  --glass-shadow: 0 8px 32px 0 rgba(5, 150, 105, 0.08);
   --glass-blur: blur(20px);
   
   /* Premium Green Gradients */
@@ -417,8 +417,15 @@ body::after {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--glass-shadow);
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .filter-group {
@@ -980,8 +987,8 @@ body::after {
 
 /* Ultra Elegant Footer */
 .app-footer {
-  margin-top: 6rem;
-  padding: 4rem 0 2rem;
+  margin-top: 4rem;
+  padding: 2rem 0 1.5rem;
   background: var(--surface);
   border-top: 1px solid var(--border-light);
   position: relative;
@@ -1006,7 +1013,7 @@ body::after {
 
 .footer-brand {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   animation: fadeInUp 0.8s var(--bounce);
 }
 
@@ -1049,16 +1056,16 @@ body::after {
   width: 100px;
   height: 2px;
   background: var(--gradient-accent);
-  margin: 0 auto 3rem;
+  margin: 0 auto 2rem;
   border-radius: 1px;
 }
 
 .footer-info {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 3rem;
+  gap: 2rem;
   align-items: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .developer-info {
@@ -1145,7 +1152,7 @@ body::after {
 
 .footer-bottom {
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--border-light);
 }
 

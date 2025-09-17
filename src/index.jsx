@@ -169,28 +169,28 @@ function App() {
       
       <div className="app">
         <main className="app-main">
-          <SearchBar 
-            searchKeyword={searchKeyword}
-            setSearchKeyword={setSearchKeyword}
-          />
-          
-          <FilterControls
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            filterBy={filterBy}
-            setFilterBy={setFilterBy}
-            selectedTag={selectedTag}
-            setSelectedTag={setSelectedTag}
-            favoriteCount={favorites.size}
-          />
-          
-          <NoteInput 
-            title={title}
-            setTitle={setTitle}
-            body={body}
-            setBody={setBody}
-            addNote={addNote}
-          />
+        <SearchBar 
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+        />
+        
+        <NoteInput 
+          title={title}
+          setTitle={setTitle}
+          body={body}
+          setBody={setBody}
+          addNote={addNote}
+        />
+        
+        <FilterControls 
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          filterBy={filterBy}
+          setFilterBy={setFilterBy}
+          selectedTag={selectedTag}
+          setSelectedTag={setSelectedTag}
+          favoriteCount={favorites.size}
+        />
           
           <NoteSection 
             title="📝 Active Notes"
