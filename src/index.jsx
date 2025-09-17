@@ -57,8 +57,9 @@ function App() {
     ));
   };
 
-  // Toggle expand archive card
-  const toggleExpandArchive = (id) => {
+  // Toggle expand archive card - Fixed to prevent interference
+  const toggleExpandArchive = (id, event) => {
+    event.stopPropagation(); // Prevent card click from interfering
     const newExpanded = new Set(expandedArchives);
     if (newExpanded.has(id)) {
       newExpanded.delete(id);
@@ -188,19 +189,19 @@ function App() {
           />
           
           <NoteSection 
-            title="📝 Catatan Aktif"
+            title="📝 Active Notes"
             notes={activeNotes}
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
             onToggleFavorite={toggleFavorite}
             favorites={favorites}
-            emptyMessage="Belum ada catatan aktif"
+            emptyMessage="No active notes yet"
             emptyIcon="📝"
             isArchive={false}
           />
           
           <NoteSection 
-            title="📂 Catatan Arsip"
+            title="📂 Archived Notes"
             notes={archivedNotes}
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
@@ -208,7 +209,7 @@ function App() {
             onToggleFavorite={toggleFavorite}
             expandedItems={expandedArchives}
             favorites={favorites}
-            emptyMessage="Belum ada catatan diarsipkan"
+            emptyMessage="No archived notes yet"
             emptyIcon="📂"
             isArchive={true}
           />
@@ -231,12 +232,12 @@ function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport }) {
         </div>
         <div className="header-actions">
           <div className="stats-badge">
-            {totalNotes} Total • {activeNotes} Aktif
+            {totalNotes} Total • {activeNotes} Active
           </div>
           <button 
             className="theme-toggle"
             onClick={onExport}
-            title="Export catatan sebagai JSON"
+            title="Export notes as JSON"
           >
             📥
           </button>
@@ -262,7 +263,7 @@ function SearchBar({ searchKeyword, setSearchKeyword }) {
           <div className="search-icon">🔍</div>
           <input
             type="text"
-            placeholder="Cari catatan berdasarkan judul atau isi..."
+            placeholder="Search notes by title or content..."
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
           />
@@ -291,21 +292,21 @@ function FilterControls({
           value={selectedTag}
           onChange={(e) => setSelectedTag(e.target.value)}
         >
-          <option value="all">Semua</option>
-          <option value="favorites">❤️ Favorit ({favoriteCount})</option>
+          <option value="all">All</option>
+          <option value="favorites">❤️ Favorites ({favoriteCount})</option>
         </select>
       </div>
       
       <div className="filter-group">
-        <label>📊 Urutkan:</label>
+        <label>📊 Sort:</label>
         <select 
           className="sort-select"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
         >
-          <option value="newest">Terbaru</option>
-          <option value="oldest">Terlama</option>
-          <option value="title">Judul A-Z</option>
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="title">Title A-Z</option>
         </select>
       </div>
       
@@ -316,10 +317,10 @@ function FilterControls({
           value={filterBy}
           onChange={(e) => setFilterBy(e.target.value)}
         >
-          <option value="all">Semua</option>
-          <option value="today">Hari Ini</option>
-          <option value="yesterday">Kemarin</option>
-          <option value="week">Minggu Ini</option>
+          <option value="all">All</option>
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="week">This Week</option>
         </select>
       </div>
     </section>
@@ -333,12 +334,12 @@ function NoteInput({ title, setTitle, body, setBody, addNote }) {
 
   return (
     <section className="note-input glass-card">
-      <h2>Buat Catatan Baru</h2>
+      <h2>Create New Note</h2>
       <form className="note-form" onSubmit={addNote}>
         <div className="input-group">
           <input
             type="text"
-            placeholder="Judul catatan yang menarik..."
+            placeholder="Enter an interesting title..."
             value={title}
             onChange={(e) => {
               if (e.target.value.length <= maxTitleLength) {
@@ -352,14 +353,14 @@ function NoteInput({ title, setTitle, body, setBody, addNote }) {
         </div>
         <div className="input-group">
           <textarea
-            placeholder="Tulis isi catatan Anda di sini..."
+            placeholder="Write your note content here..."
             value={body}
             onChange={(e) => setBody(e.target.value)}
             rows="4"
           />
         </div>
         <button type="submit" className="submit-btn">
-          ✨ Simpan Catatan
+          ✨ Save Note
         </button>
       </form>
     </section>
@@ -394,7 +395,7 @@ function NoteSection({
       {notes.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">{emptyIcon}</div>
-          <h3 className="empty-title">Belum Ada Catatan</h3>
+          <h3 className="empty-title">No Notes Yet</h3>
           <p className="empty-message">{emptyMessage}</p>
         </div>
       ) : (
@@ -429,9 +430,9 @@ function NoteCard({
   isFavorite = false,
   isArchive = false 
 }) {
-  const handleCardClick = () => {
+  const handleCardClick = (event) => {
     if (isArchive && onToggleExpand) {
-      onToggleExpand(note.id);
+      onToggleExpand(note.id, event);
     }
   };
 
@@ -456,21 +457,21 @@ function NoteCard({
           <button 
             className="action-btn favorite-btn" 
             onClick={() => onToggleFavorite(note.id)}
-            title={isFavorite ? 'Hapus dari favorit' : 'Tambah ke favorit'}
+            title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             {isFavorite ? '❤️' : '🤍'}
           </button>
           <button 
             className="action-btn archive-btn" 
             onClick={() => onArchive(note.id)}
-            title={note.archived ? 'Aktifkan catatan' : 'Arsipkan catatan'}
+            title={note.archived ? 'Activate note' : 'Archive note'}
           >
             {note.archived ? '📂' : '📝'}
           </button>
           <button 
             className="action-btn delete-btn" 
             onClick={() => onDelete(note.id)}
-            title="Hapus catatan"
+            title="Delete note"
           >
             🗑️
           </button>
@@ -490,20 +491,75 @@ function NoteCard({
   );
 }
 
-// Komponen Footer dengan branding Noto
+// Elegant Footer with Surya Hanjaya branding
 function Footer() {
   return (
     <footer className="app-footer">
       <div className="footer-content">
-        <div className="footer-logo">Noto</div>
-        <p className="footer-text">
-          Aplikasi catatan pribadi yang elegan dan powerful untuk Gen Z
-        </p>
-        <div className="footer-links">
-          <a href="#" className="footer-link">Privacy</a>
-          <a href="#" className="footer-link">Terms</a>
-          <a href="#" className="footer-link">Support</a>
-          <a href="#" className="footer-link">About</a>
+        <div className="footer-brand">
+          <div className="footer-logo">
+            <div className="logo-icon">N</div>
+            <span>Noto</span>
+          </div>
+          <p className="footer-tagline">
+            The most beautiful notes app for the modern digital generation
+          </p>
+        </div>
+        
+        <div className="footer-divider"></div>
+        
+        <div className="footer-info">
+          <div className="developer-info">
+            <h4>Created with ❤️ by</h4>
+            <div className="developer-name">Surya Hanjaya</div>
+            <div className="developer-title">AI Researcher • Full-Stack Developer</div>
+            <div className="developer-education">Informatics Engineering '23 • Universitas Negeri Surabaya</div>
+          </div>
+          
+          <div className="social-links">
+            <a 
+              href="https://www.linkedin.com/in/surya-hanjaya/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-link linkedin"
+              title="LinkedIn Profile"
+            >
+              <span className="social-icon">💼</span>
+              <span className="social-text">LinkedIn</span>
+            </a>
+            <a 
+              href="https://github.com/suryahanjaya?tab=repositories" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-link github"
+              title="GitHub Profile"
+            >
+              <span className="social-icon">💻</span>
+              <span className="social-text">GitHub</span>
+            </a>
+            <a 
+              href="https://www.instagram.com/h4njy/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-link instagram"
+              title="Instagram Profile"
+            >
+              <span className="social-icon">📸</span>
+              <span className="social-text">Instagram</span>
+            </a>
+          </div>
+        </div>
+        
+        <div className="footer-bottom">
+          <p className="copyright">
+            © 2024 Noto. Made with modern web technologies and lots of creativity.
+          </p>
+          <div className="tech-stack">
+            <span className="tech-item">React 19</span>
+            <span className="tech-item">Vite 5</span>
+            <span className="tech-item">CSS3</span>
+            <span className="tech-item">JavaScript ES6+</span>
+          </div>
         </div>
       </div>
     </footer>
