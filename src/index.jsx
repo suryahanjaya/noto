@@ -58,17 +58,21 @@ function App() {
   };
 
   // Toggle expand archive card - Fixed to prevent interference
-  const toggleExpandArchive = (id, event) => {
-    event.stopPropagation(); // Prevent card click from interfering
+  const toggleExpandArchive = (id) => {
+    console.log('Toggling archive:', id, 'Current expanded:', Array.from(expandedArchives));
     setExpandedArchives(prev => {
       const newExpanded = new Set(prev);
       if (newExpanded.has(id)) {
+        // If this card is already expanded, close it
+        console.log('Closing card:', id);
         newExpanded.delete(id);
       } else {
         // Close all others first, then open this one
+        console.log('Opening card:', id, 'Closing all others');
         newExpanded.clear();
         newExpanded.add(id);
       }
+      console.log('New expanded set:', Array.from(newExpanded));
       return newExpanded;
     });
   };
@@ -435,8 +439,9 @@ function NoteCard({
   isArchive = false 
 }) {
   const handleCardClick = (event) => {
+    event.stopPropagation(); // Prevent event bubbling
     if (isArchive && onToggleExpand) {
-      onToggleExpand(note.id, event);
+      onToggleExpand(note.id);
     }
   };
 
