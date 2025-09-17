@@ -2,38 +2,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  /* Custom Green Color Palette */
-  --primary: #67C090;
-  --secondary: #5aab7e;
-  --success: #67C090;
+  /* Dynamic Green Color Palette */
+  --primary: #328E6E;
+  --secondary: #67AE6E;
+  --success: #90C67C;
   --warning: #F59E0B;
   --danger: #EF4444;
-  --accent: #67C090;
-  --info: #06B6D4;
+  --accent: #67AE6E;
+  --info: #328E6E;
   
-  /* Light Mode - Custom Green */
-  --bg-primary: #DDF4E7;
-  --bg-secondary: #f0f8f3;
+  /* Light Mode - Dynamic Green */
+  --bg-primary: #E1EEBC;
+  --bg-secondary: #f5f9e8;
   --bg-tertiary: #FFFFFF;
-  --text-primary: #2d5a3d;
-  --text-secondary: #4a7c59;
-  --text-tertiary: #6b8c7a;
-  --text-muted: #8ba896;
-  --border: #b8d4c1;
-  --border-light: #c8dccf;
+  --text-primary: #1a4d3a;
+  --text-secondary: #2d5a3d;
+  --text-tertiary: #4a7c59;
+  --text-muted: #6b8c7a;
+  --border: #90C67C;
+  --border-light: #b8d4a8;
   --surface: #FFFFFF;
   --surface-elevated: #FEFEFE;
   
   /* Glass Effect - Enhanced */
-  --glass-bg: rgba(221, 244, 231, 0.25);
-  --glass-border: rgba(103, 192, 144, 0.18);
-  --glass-shadow: 0 8px 32px 0 rgba(103, 192, 144, 0.1);
+  --glass-bg: rgba(225, 238, 188, 0.25);
+  --glass-border: rgba(103, 174, 110, 0.18);
+  --glass-shadow: 0 8px 32px 0 rgba(50, 142, 110, 0.1);
   --glass-blur: blur(16px);
   
-  /* Custom Green Gradients */
-  --gradient-primary: linear-gradient(135deg, #DDF4E7 0%, #b8e6c7 100%);
-  --gradient-secondary: linear-gradient(135deg, #67C090 0%, #5aab7e 100%);
-  --gradient-accent: linear-gradient(135deg, #67C090 0%, #5aab7e 100%);
+  /* Dynamic Green Gradients */
+  --gradient-primary: linear-gradient(135deg, #E1EEBC 0%, #90C67C 100%);
+  --gradient-secondary: linear-gradient(135deg, #67AE6E 0%, #328E6E 100%);
+  --gradient-accent: linear-gradient(135deg, #90C67C 0%, #67AE6E 100%);
+  --gradient-light: linear-gradient(135deg, #E1EEBC 0%, #f5f9e8 100%);
+  --gradient-medium: linear-gradient(135deg, #90C67C 0%, #67AE6E 100%);
+  --gradient-dark: linear-gradient(135deg, #67AE6E 0%, #328E6E 100%);
   --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
   --gradient-warning: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
   --gradient-danger: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
@@ -58,25 +61,25 @@
 
 /* Dark Mode Variables - Premium Green */
 [data-theme="dark"] {
-  --bg-primary: #0C1910;
-  --bg-secondary: #1A2E1A;
-  --bg-tertiary: #2D4A2D;
-  --text-primary: #F0FDF4;
-  --text-secondary: #BBF7D0;
-  --text-tertiary: #86EFAC;
-  --text-muted: #4ADE80;
-  --border: #166534;
-  --border-light: #22C55E;
-  --surface: #1A2E1A;
-  --surface-elevated: #2D4A2D;
+  --bg-primary: #0d1f1a;
+  --bg-secondary: #1a332b;
+  --bg-tertiary: #2d5a3d;
+  --text-primary: #E1EEBC;
+  --text-secondary: #90C67C;
+  --text-tertiary: #67AE6E;
+  --text-muted: #328E6E;
+  --border: #2d5a3d;
+  --border-light: #4a7c59;
+  --surface: #1a332b;
+  --surface-elevated: #2d5a3d;
   
-  --glass-bg: rgba(26, 46, 26, 0.8);
-  --glass-border: rgba(52, 211, 153, 0.2);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glass-bg: rgba(13, 31, 26, 0.8);
+  --glass-border: rgba(225, 238, 188, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(50, 142, 110, 0.2);
   
-  --gradient-primary: linear-gradient(135deg, #059669 0%, #047857 100%);
-  --gradient-secondary: linear-gradient(135deg, #34D399 0%, #10B981 100%);
-  --gradient-accent: linear-gradient(135deg, #6EE7B7 0%, #34D399 100%);
+  --gradient-primary: linear-gradient(135deg, #2d5a3d 0%, #1a332b 100%);
+  --gradient-secondary: linear-gradient(135deg, #328E6E 0%, #67AE6E 100%);
+  --gradient-accent: linear-gradient(135deg, #67AE6E 0%, #90C67C 100%);
   --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
   --gradient-warning: linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
   --gradient-danger: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
@@ -111,10 +114,10 @@ body::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(103, 192, 144, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(221, 244, 231, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(90, 171, 126, 0.20) 0%, transparent 50%),
-    radial-gradient(circle at 60% 60%, rgba(184, 230, 199, 0.15) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(50, 142, 110, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(225, 238, 188, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(103, 174, 110, 0.20) 0%, transparent 50%),
+    radial-gradient(circle at 60% 60%, rgba(144, 198, 124, 0.15) 0%, transparent 50%);
   z-index: -1;
   animation: liquidMove 40s ease-in-out infinite, pulseGlow 8s ease-in-out infinite;
 }
@@ -122,10 +125,10 @@ body::before {
 /* Dark mode background enhancement */
 [data-theme="dark"] body::before {
   background: 
-    radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 60% 60%, rgba(110, 231, 183, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(50, 142, 110, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(103, 174, 110, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(144, 198, 124, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 60% 60%, rgba(225, 238, 188, 0.06) 0%, transparent 50%);
 }
 
 /* Additional animated elements */
@@ -332,11 +335,11 @@ body::after {
   z-index: 100;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  background: rgba(221, 244, 231, 0.95);
-  border-bottom: 1px solid rgba(103, 192, 144, 0.2);
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
   padding: 1rem 0;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 10px rgba(103, 192, 144, 0.1);
+  box-shadow: var(--glass-shadow);
   animation: slideInDown 0.6s var(--bounce);
   transition: all var(--transition-normal);
 }
@@ -417,9 +420,10 @@ body::after {
 .search-input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--glass-border);
   border-radius: 25px;
-  background: var(--bg-secondary);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
   font-size: 0.9rem;
   transition: all 0.3s ease;
   color: var(--text-primary);
@@ -429,7 +433,7 @@ body::after {
   outline: none;
   border-color: var(--accent);
   background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(103, 192, 144, 0.1);
+  box-shadow: var(--glass-shadow);
 }
 
 /* User Info */
@@ -606,15 +610,15 @@ body::after {
 }
 
 .folder-card.blue {
-  background: linear-gradient(135deg, #f0f8f3 0%, #d4e6d9 100%);
+  background: var(--gradient-primary);
 }
 
 .folder-card.pink {
-  background: linear-gradient(135deg, #f0f8f3 0%, #d4e6d9 100%);
+  background: var(--gradient-medium);
 }
 
 .folder-card.yellow {
-  background: linear-gradient(135deg, #f0f8f3 0%, #d4e6d9 100%);
+  background: var(--gradient-light);
 }
 
 .folder-header {
@@ -702,9 +706,11 @@ body::after {
   gap: 1rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  background: white;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--glass-shadow);
 }
 
 .date-nav-btn {
@@ -751,15 +757,15 @@ body::after {
 }
 
 .note-card-commercial.yellow {
-  background: linear-gradient(135deg, #f0f8f3 0%, #d4e6d9 100%);
+  background: var(--gradient-light);
 }
 
 .note-card-commercial.pink {
-  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+  background: var(--gradient-medium);
 }
 
 .note-card-commercial.blue {
-  background: linear-gradient(135deg, #DDF4E7 0%, #b8e6c7 100%);
+  background: var(--gradient-primary);
 }
 
 .note-header-commercial {
