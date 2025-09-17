@@ -23,6 +23,7 @@ function App() {
   const [editingNote, setEditingNote] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
+  const [editDate, setEditDate] = useState('');
   const [showMenu, setShowMenu] = useState(new Set());
 
   // Apply theme
@@ -59,6 +60,7 @@ function App() {
     setEditingNote(note.id);
     setEditTitle(note.title);
     setEditBody(note.body);
+    setEditDate(note.createdAt.split('T')[0]);
   };
 
   // Fungsi untuk menyimpan edit catatan
@@ -69,13 +71,14 @@ function App() {
     
     setNotes(notes.map(note => 
       note.id === editingNote 
-        ? { ...note, title: editTitle.trim(), body: editBody.trim() }
+        ? { ...note, title: editTitle.trim(), body: editBody.trim(), createdAt: new Date(editDate).toISOString() }
         : note
     ));
     
     setEditingNote(null);
     setEditTitle('');
     setEditBody('');
+    setEditDate('');
   };
 
   // Fungsi untuk membatalkan edit
@@ -83,6 +86,7 @@ function App() {
     setEditingNote(null);
     setEditTitle('');
     setEditBody('');
+    setEditDate('');
   };
 
   // Fungsi untuk toggle menu tombol
@@ -237,6 +241,8 @@ function App() {
                 setEditTitle={setEditTitle}
                 editBody={editBody}
                 setEditBody={setEditBody}
+                editDate={editDate}
+                setEditDate={setEditDate}
                 saveEditNote={saveEditNote}
                 cancelEdit={cancelEdit}
               />
@@ -587,60 +593,44 @@ function NoteCard({
   );
 }
 
-// Elegant Footer with Surya Hanjaya branding
+// Professional Footer
 function Footer() {
   return (
     <footer className="app-footer">
       <div className="footer-content">
-        <div className="footer-brand">
-          <div className="footer-logo">
-            <div className="logo-icon">N</div>
-            <span>Noto</span>
-          </div>
-          <p className="footer-tagline">
-            The most beautiful notes app for the modern digital generation
-          </p>
-        </div>
-        
-        <div className="footer-info">
-          <div className="developer-info">
-            <h4>Developed by</h4>
-            <div className="developer-name">Surya Hanjaya</div>
-            <div className="developer-title">AI Researcher • Full-Stack Developer</div>
-            <div className="developer-education">Informatics Engineering '23 • Universitas Negeri Surabaya</div>
+        <div className="footer-main">
+          <div className="footer-brand">
+            <div className="footer-logo">
+              <div className="logo-icon">N</div>
+              <span>Noto</span>
+            </div>
+            <p className="footer-tagline">
+              The most beautiful notes app for the modern digital generation
+            </p>
           </div>
           
-          <div className="social-links">
-            <a 
-              href="https://www.linkedin.com/in/surya-hanjaya/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="social-link linkedin"
-              title="LinkedIn Profile"
-            >
-              <span className="social-icon">💼</span>
-              <span className="social-text">LinkedIn</span>
-            </a>
-            <a 
-              href="https://github.com/suryahanjaya?tab=repositories" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="social-link github"
-              title="GitHub Profile"
-            >
-              <span className="social-icon">💻</span>
-              <span className="social-text">GitHub</span>
-            </a>
-            <a 
-              href="https://www.instagram.com/h4njy/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="social-link instagram"
-              title="Instagram Profile"
-            >
-              <span className="social-icon">📸</span>
-              <span className="social-text">Instagram</span>
-            </a>
+          <div className="footer-links">
+            <div className="footer-section">
+              <h4>Developer</h4>
+              <p>Surya Hanjaya</p>
+              <p>AI Researcher • Full-Stack Developer</p>
+              <p>Informatics Engineering '23</p>
+            </div>
+            
+            <div className="footer-section">
+              <h4>Connect</h4>
+              <div className="social-links">
+                <a href="https://www.linkedin.com/in/surya-hanjaya/" target="_blank" rel="noopener noreferrer" className="social-link">
+                  LinkedIn
+                </a>
+                <a href="https://github.com/suryahanjaya?tab=repositories" target="_blank" rel="noopener noreferrer" className="social-link">
+                  GitHub
+                </a>
+                <a href="https://www.instagram.com/h4njy/" target="_blank" rel="noopener noreferrer" className="social-link">
+                  Instagram
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -660,6 +650,8 @@ function EditNoteForm({
   setEditTitle, 
   editBody, 
   setEditBody, 
+  editDate,
+  setEditDate,
   saveEditNote, 
   cancelEdit 
 }) {
@@ -668,7 +660,7 @@ function EditNoteForm({
 
   return (
     <section className="note-input glass-card">
-      <h2>✏️ Edit Note</h2>
+      <h2>Edit Note</h2>
       <form className="note-form" onSubmit={saveEditNote}>
         <div className="input-group">
           <input
@@ -692,6 +684,18 @@ function EditNoteForm({
             placeholder="Write your note here..."
             className="body-input"
             rows="4"
+            required
+          />
+        </div>
+        
+        <div className="input-group">
+          <label htmlFor="editDate" className="input-label">Date</label>
+          <input
+            type="date"
+            id="editDate"
+            value={editDate}
+            onChange={(e) => setEditDate(e.target.value)}
+            className="date-input"
             required
           />
         </div>
