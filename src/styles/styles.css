@@ -353,8 +353,8 @@ body::after {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 2rem;
 }
@@ -362,7 +362,7 @@ body::after {
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .logo-icon {
@@ -379,11 +379,6 @@ body::after {
   box-shadow: 0 4px 20px rgba(79, 172, 254, 0.4);
 }
 
-.logo-text {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
 
 /* Header Sections */
 .header-left {
@@ -391,10 +386,6 @@ body::after {
   align-items: center;
 }
 
-.header-center {
-  display: flex;
-  justify-content: center;
-}
 
 .header-right {
   display: flex;
@@ -404,8 +395,7 @@ body::after {
 /* Search Container */
 .search-container {
   position: relative;
-  width: 100%;
-  max-width: 400px;
+  width: 300px;
 }
 
 .search-icon {
@@ -2077,7 +2067,13 @@ body::after {
   }
   
   .logo {
-    font-size: 1.25rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .search-container {
+    width: 100%;
+    max-width: 250px;
   }
   
   .logo-icon {
@@ -2412,9 +2408,6 @@ body::after {
 }
 
 @media (max-width: 480px) {
-  .logo-text {
-    font-size: 1.5rem;
-  }
   
   .note-input {
     padding: 1.5rem;

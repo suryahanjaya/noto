@@ -355,20 +355,16 @@ function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport, sear
         <div className="header-left">
           <div className="logo">
             <div className="logo-icon">N</div>
-            <div className="logo-text">Noto</div>
-          </div>
-        </div>
-        
-        <div className="header-center">
-          <div className="search-container">
-            <div className="search-icon">🔍</div>
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
-              className="search-input"
-            />
+            <div className="search-container">
+              <div className="search-icon">🔍</div>
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                className="search-input"
+              />
+            </div>
           </div>
         </div>
         
