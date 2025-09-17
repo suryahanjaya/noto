@@ -391,24 +391,6 @@ function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport, sear
   );
 }
 
-// Komponen SearchBar untuk pencarian dengan glass effect
-function SearchBar({ searchKeyword, setSearchKeyword }) {
-  return (
-    <section className="search-section">
-      <div className="search-container">
-        <div className="search-bar">
-          <div className="search-icon">🔍</div>
-          <input
-            type="text"
-            placeholder="Search notes by title or content..."
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // Komponen RecentFoldersSection
 function RecentFoldersSection({ onFolderClick, lockedItems, onToggleLock }) {
