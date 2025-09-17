@@ -14,6 +14,17 @@ function App() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+  const [sortBy, setSortBy] = useState('newest');
+  const [filterBy, setFilterBy] = useState('all');
+  const [expandedArchives, setExpandedArchives] = useState(new Set());
+  const [favorites, setFavorites] = useState(new Set());
+  const [selectedTag, setSelectedTag] = useState('all');
+
+  // Apply theme
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   // Fungsi untuk menambah catatan baru
   const addNote = (e) => {
@@ -46,24 +57,126 @@ function App() {
     ));
   };
 
-  // Filter catatan berdasarkan kata kunci pencarian
-  const filteredNotes = notes.filter(note => 
-    note.title.toLowerCase().includes(searchKeyword.toLowerCase())
-  );
+  // Toggle expand archive card
+  const toggleExpandArchive = (id) => {
+    const newExpanded = new Set(expandedArchives);
+    if (newExpanded.has(id)) {
+      newExpanded.delete(id);
+    } else {
+      newExpanded.add(id);
+    }
+    setExpandedArchives(newExpanded);
+  };
+
+  // Toggle favorite note
+  const toggleFavorite = (id) => {
+    const newFavorites = new Set(favorites);
+    if (newFavorites.has(id)) {
+      newFavorites.delete(id);
+    } else {
+      newFavorites.add(id);
+    }
+    setFavorites(newFavorites);
+  };
+
+  // Export notes as JSON
+  const exportNotes = () => {
+    const dataStr = JSON.stringify(notes, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const exportFileDefaultName = `noto-backup-${new Date().toISOString().split('T')[0]}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  // Filter dan sort catatan
+  const getFilteredAndSortedNotes = (notesToFilter) => {
+    let filtered = notesToFilter;
+
+    // Filter berdasarkan pencarian
+    if (searchKeyword) {
+      filtered = filtered.filter(note => 
+        note.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        note.body.toLowerCase().includes(searchKeyword.toLowerCase())
+      );
+    }
+
+    // Filter berdasarkan favorites
+    if (selectedTag === 'favorites') {
+      filtered = filtered.filter(note => favorites.has(note.id));
+    }
+
+    // Filter berdasarkan tanggal
+    if (filterBy !== 'all') {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const weekAgo = new Date(today);
+      weekAgo.setDate(weekAgo.getDate() - 7);
+
+      filtered = filtered.filter(note => {
+        const noteDate = new Date(note.createdAt);
+        switch (filterBy) {
+          case 'today':
+            return noteDate >= today;
+          case 'yesterday':
+            return noteDate >= yesterday && noteDate < today;
+          case 'week':
+            return noteDate >= weekAgo;
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Sort catatan
+    return filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'newest':
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        case 'oldest':
+          return new Date(a.createdAt) - new Date(b.createdAt);
+        case 'title':
+          return a.title.localeCompare(b.title);
+        default:
+          return 0;
+      }
+    });
+  };
 
   // Pisahkan catatan aktif dan arsip
-  const activeNotes = filteredNotes.filter(note => !note.archived);
-  const archivedNotes = filteredNotes.filter(note => note.archived);
+  const allFilteredNotes = getFilteredAndSortedNotes(notes);
+  const activeNotes = allFilteredNotes.filter(note => !note.archived);
+  const archivedNotes = allFilteredNotes.filter(note => note.archived);
 
   return (
     <>
-      <Header totalNotes={notes.length} activeNotes={activeNotes.length} />
+      <Header 
+        totalNotes={notes.length} 
+        activeNotes={activeNotes.length}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        onExport={exportNotes}
+      />
       
       <div className="app">
         <main className="app-main">
           <SearchBar 
             searchKeyword={searchKeyword}
             setSearchKeyword={setSearchKeyword}
+          />
+          
+          <FilterControls
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            filterBy={filterBy}
+            setFilterBy={setFilterBy}
+            selectedTag={selectedTag}
+            setSelectedTag={setSelectedTag}
+            favoriteCount={favorites.size}
           />
           
           <NoteInput 
@@ -79,8 +192,11 @@ function App() {
             notes={activeNotes}
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
+            onToggleFavorite={toggleFavorite}
+            favorites={favorites}
             emptyMessage="Belum ada catatan aktif"
             emptyIcon="📝"
+            isArchive={false}
           />
           
           <NoteSection 
@@ -88,8 +204,13 @@ function App() {
             notes={archivedNotes}
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
+            onToggleExpand={toggleExpandArchive}
+            onToggleFavorite={toggleFavorite}
+            expandedItems={expandedArchives}
+            favorites={favorites}
             emptyMessage="Belum ada catatan diarsipkan"
             emptyIcon="📂"
+            isArchive={true}
           />
         </main>
       </div>
@@ -99,8 +220,8 @@ function App() {
   );
 }
 
-// Komponen Header dengan branding Noto
-function Header({ totalNotes, activeNotes }) {
+// Komponen Header dengan branding Noto dan dark mode toggle
+function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport }) {
   return (
     <header className="app-header">
       <div className="header-content">
@@ -112,6 +233,20 @@ function Header({ totalNotes, activeNotes }) {
           <div className="stats-badge">
             {totalNotes} Total • {activeNotes} Aktif
           </div>
+          <button 
+            className="theme-toggle"
+            onClick={onExport}
+            title="Export catatan sebagai JSON"
+          >
+            📥
+          </button>
+          <button 
+            className="theme-toggle"
+            onClick={() => setDarkMode(!darkMode)}
+            title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
         </div>
       </div>
     </header>
@@ -127,11 +262,65 @@ function SearchBar({ searchKeyword, setSearchKeyword }) {
           <div className="search-icon">🔍</div>
           <input
             type="text"
-            placeholder="Cari catatan berdasarkan judul..."
+            placeholder="Cari catatan berdasarkan judul atau isi..."
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
           />
         </div>
+      </div>
+    </section>
+  );
+}
+
+// Komponen FilterControls untuk sorting dan filtering
+function FilterControls({ 
+  sortBy, 
+  setSortBy, 
+  filterBy, 
+  setFilterBy, 
+  selectedTag, 
+  setSelectedTag, 
+  favoriteCount 
+}) {
+  return (
+    <section className="filter-controls">
+      <div className="filter-group">
+        <label>🏷️ Tags:</label>
+        <select 
+          className="filter-select"
+          value={selectedTag}
+          onChange={(e) => setSelectedTag(e.target.value)}
+        >
+          <option value="all">Semua</option>
+          <option value="favorites">❤️ Favorit ({favoriteCount})</option>
+        </select>
+      </div>
+      
+      <div className="filter-group">
+        <label>📊 Urutkan:</label>
+        <select 
+          className="sort-select"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="newest">Terbaru</option>
+          <option value="oldest">Terlama</option>
+          <option value="title">Judul A-Z</option>
+        </select>
+      </div>
+      
+      <div className="filter-group">
+        <label>📅 Filter:</label>
+        <select 
+          className="filter-select"
+          value={filterBy}
+          onChange={(e) => setFilterBy(e.target.value)}
+        >
+          <option value="all">Semua</option>
+          <option value="today">Hari Ini</option>
+          <option value="yesterday">Kemarin</option>
+          <option value="week">Minggu Ini</option>
+        </select>
       </div>
     </section>
   );
@@ -178,7 +367,19 @@ function NoteInput({ title, setTitle, body, setBody, addNote }) {
 }
 
 // Komponen NoteSection untuk menampilkan section catatan dengan design modern
-function NoteSection({ title, notes, onDelete, onArchive, emptyMessage, emptyIcon }) {
+function NoteSection({ 
+  title, 
+  notes, 
+  onDelete, 
+  onArchive, 
+  onToggleExpand,
+  onToggleFavorite,
+  expandedItems,
+  favorites,
+  emptyMessage, 
+  emptyIcon,
+  isArchive = false
+}) {
   return (
     <section className="notes-section">
       <div className="section-header">
@@ -204,6 +405,11 @@ function NoteSection({ title, notes, onDelete, onArchive, emptyMessage, emptyIco
               note={note}
               onDelete={onDelete}
               onArchive={onArchive}
+              onToggleExpand={onToggleExpand}
+              onToggleFavorite={onToggleFavorite}
+              isExpanded={expandedItems?.has(note.id)}
+              isFavorite={favorites?.has(note.id)}
+              isArchive={isArchive}
             />
           ))}
         </div>
@@ -213,12 +419,47 @@ function NoteSection({ title, notes, onDelete, onArchive, emptyMessage, emptyIco
 }
 
 // Komponen NoteCard untuk menampilkan setiap catatan dengan design premium
-function NoteCard({ note, onDelete, onArchive }) {
+function NoteCard({ 
+  note, 
+  onDelete, 
+  onArchive, 
+  onToggleExpand,
+  onToggleFavorite,
+  isExpanded = true,
+  isFavorite = false,
+  isArchive = false 
+}) {
+  const handleCardClick = () => {
+    if (isArchive && onToggleExpand) {
+      onToggleExpand(note.id);
+    }
+  };
+
+  const isCollapsed = isArchive && !isExpanded;
+
   return (
-    <article className={`note-card ${note.archived ? 'archived' : ''}`}>
+    <article 
+      className={`note-card ${note.archived ? 'archived' : ''} ${isCollapsed ? 'collapsed' : ''}`}
+      onClick={isArchive ? handleCardClick : undefined}
+      style={{ cursor: isArchive ? 'pointer' : 'default' }}
+    >
       <div className="note-header">
-        <h3 className="note-title">{note.title}</h3>
-        <div className="note-actions">
+        <h3 className="note-title">
+          {note.title}
+          {isArchive && (
+            <span className="expand-indicator">
+              {isCollapsed ? ' ▼' : ' ▲'}
+            </span>
+          )}
+        </h3>
+        <div className="note-actions" onClick={(e) => e.stopPropagation()}>
+          <button 
+            className="action-btn favorite-btn" 
+            onClick={() => onToggleFavorite(note.id)}
+            title={isFavorite ? 'Hapus dari favorit' : 'Tambah ke favorit'}
+          >
+            {isFavorite ? '❤️' : '🤍'}
+          </button>
           <button 
             className="action-btn archive-btn" 
             onClick={() => onArchive(note.id)}
@@ -236,11 +477,15 @@ function NoteCard({ note, onDelete, onArchive }) {
         </div>
       </div>
       
-      <div className="note-date">
-        {showFormattedDate(note.createdAt)}
-      </div>
-      
-      <div className="note-body">{note.body}</div>
+      {!isCollapsed && (
+        <>
+          <div className="note-date">
+            {showFormattedDate(note.createdAt)}
+          </div>
+          
+          <div className="note-body">{note.body}</div>
+        </>
+      )}
     </article>
   );
 }
