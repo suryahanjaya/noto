@@ -526,7 +526,7 @@ body::after {
 
 .folders-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -545,15 +545,15 @@ body::after {
 }
 
 .folder-card.blue {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
 }
 
 .folder-card.pink {
-  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+  background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
 }
 
 .folder-card.yellow {
-  background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+  background: linear-gradient(135deg, #f9fbe7 0%, #f0f4c3 100%);
 }
 
 .folder-header {
@@ -669,7 +669,7 @@ body::after {
 
 .notes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -689,15 +689,15 @@ body::after {
 }
 
 .note-card-commercial.yellow {
-  background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+  background: linear-gradient(135deg, #f9fbe7 0%, #f0f4c3 100%);
 }
 
 .note-card-commercial.pink {
-  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+  background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
 }
 
 .note-card-commercial.blue {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
 }
 
 .note-header-commercial {
@@ -774,6 +774,154 @@ body::after {
 .new-note-icon {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
+}
+
+/* Folder Actions */
+.folder-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.lock-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.lock-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+/* Note Actions Commercial */
+.note-actions-commercial {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.action-btn-commercial {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn-commercial:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+  transform: scale(1.1);
+}
+
+/* Folder Popup */
+.folder-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.folder-popup {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: slideInUp 0.3s ease;
+}
+
+.folder-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.folder-popup-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: #f8f9fa;
+  color: #333;
+}
+
+.folder-popup-content {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Connect Buttons Hover Effects */
+.social-links a {
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.social-links a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-links a[href*="github"]:hover {
+  background: linear-gradient(135deg, #333 0%, #555 100%);
+  color: white;
+}
+
+.social-links a[href*="linkedin"]:hover {
+  background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+  color: white;
+}
+
+.social-links a[href*="twitter"]:hover {
+  background: linear-gradient(135deg, #1da1f2 0%, #0d8bd9 100%);
+  color: white;
+}
+
+.social-links a[href*="instagram"]:hover {
+  background: linear-gradient(135deg, #e4405f 0%, #c13584 100%);
+  color: white;
 }
 
 .header-actions {
@@ -1615,6 +1763,17 @@ body::after {
   align-items: start;
 }
 
+/* Footer Light/Dark Mode */
+[data-theme="light"] .app-footer {
+  background: rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .app-footer {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .footer-brand {
   text-align: left;
   margin-bottom: 0.75rem;
@@ -2243,7 +2402,7 @@ body::after {
   }
   
   .folders-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1rem;
   }
   

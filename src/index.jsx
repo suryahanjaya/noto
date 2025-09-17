@@ -25,6 +25,8 @@ function App() {
   const [editBody, setEditBody] = useState('');
   const [editDate, setEditDate] = useState('');
   const [showMenu, setShowMenu] = useState(new Set());
+  const [lockedItems, setLockedItems] = useState(new Set());
+  const [showFolderPopup, setShowFolderPopup] = useState(null);
 
   // Apply theme
   React.useEffect(() => {
@@ -98,6 +100,24 @@ function App() {
       newShowMenu.add(id);
     }
     setShowMenu(newShowMenu);
+  };
+
+  const toggleLock = (id) => {
+    const newLockedItems = new Set(lockedItems);
+    if (newLockedItems.has(id)) {
+      newLockedItems.delete(id);
+    } else {
+      newLockedItems.add(id);
+    }
+    setLockedItems(newLockedItems);
+  };
+
+  const openFolderPopup = (folderId) => {
+    setShowFolderPopup(folderId);
+  };
+
+  const closeFolderPopup = () => {
+    setShowFolderPopup(null);
   };
 
   // Fungsi untuk mengarsipkan/mengaktifkan catatan
@@ -221,7 +241,11 @@ function App() {
       
       <div className="app">
         <main className="app-main">
-        <RecentFoldersSection />
+        <RecentFoldersSection 
+          onFolderClick={openFolderPopup}
+          lockedItems={lockedItems}
+          onToggleLock={toggleLock}
+        />
         
         <NoteInput 
           title={title}
@@ -267,8 +291,10 @@ function App() {
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
             onToggleMenu={toggleMenu}
+            onToggleLock={toggleLock}
             favorites={favorites}
             showMenu={showMenu}
+            lockedItems={lockedItems}
             emptyMessage="No active notes yet"
             emptyIcon="📝"
             isArchive={false}
@@ -283,15 +309,32 @@ function App() {
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
             onToggleMenu={toggleMenu}
+            onToggleLock={toggleLock}
             expandedItems={expandedArchives}
             favorites={favorites}
             showMenu={showMenu}
+            lockedItems={lockedItems}
             emptyMessage="No archived notes yet"
             emptyIcon="📂"
             isArchive={true}
           />
         </main>
       </div>
+      
+      {/* Folder Popup Modal */}
+      {showFolderPopup && (
+        <div className="folder-popup-overlay" onClick={closeFolderPopup}>
+          <div className="folder-popup" onClick={(e) => e.stopPropagation()}>
+            <div className="folder-popup-header">
+              <h3>Folder Notes</h3>
+              <button className="close-btn" onClick={closeFolderPopup}>✕</button>
+            </div>
+            <div className="folder-popup-content">
+              <p>Notes in this folder will appear here...</p>
+            </div>
+          </div>
+        </div>
+      )}
       
       <Footer />
     </>
@@ -306,7 +349,7 @@ function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport, sear
         <div className="header-left">
           <div className="logo">
             <div className="logo-icon">N</div>
-            <div className="logo-text">MY NOTES</div>
+            <div className="logo-text">Noto</div>
           </div>
         </div>
         
@@ -324,10 +367,21 @@ function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport, sear
         </div>
         
         <div className="header-right">
-          <div className="user-info">
-            <span className="user-name">Sayef mahmud</span>
-            <div className="user-avatar">👤</div>
-            <button className="menu-btn">☰</button>
+          <div className="header-actions">
+            <button 
+              className="theme-toggle"
+              onClick={() => setDarkMode(!darkMode)}
+              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {darkMode ? '☀️' : '🌙'}
+            </button>
+            <button 
+              className="theme-toggle"
+              onClick={onExport}
+              title="Export notes as JSON"
+            >
+              📥
+            </button>
           </div>
         </div>
       </div>
@@ -355,7 +409,7 @@ function SearchBar({ searchKeyword, setSearchKeyword }) {
 }
 
 // Komponen RecentFoldersSection
-function RecentFoldersSection() {
+function RecentFoldersSection({ onFolderClick, lockedItems, onToggleLock }) {
   const [activeFilter, setActiveFilter] = useState('This Week');
   
   const folders = [
@@ -385,10 +439,19 @@ function RecentFoldersSection() {
       
       <div className="folders-grid">
         {folders.map(folder => (
-          <div key={folder.id} className={`folder-card ${folder.color}`}>
+          <div key={folder.id} className={`folder-card ${folder.color}`} onClick={() => onFolderClick(folder.id)}>
             <div className="folder-header">
               <div className="folder-icon">{folder.icon}</div>
-              <button className="folder-menu">⋯</button>
+              <div className="folder-actions">
+                <button 
+                  className="lock-btn" 
+                  onClick={(e) => { e.stopPropagation(); onToggleLock(folder.id); }}
+                  title={lockedItems.has(folder.id) ? 'Unlock folder' : 'Lock folder'}
+                >
+                  {lockedItems.has(folder.id) ? '🔒' : '🔓'}
+                </button>
+                <button className="folder-menu" onClick={(e) => e.stopPropagation()}>⋯</button>
+              </div>
             </div>
             <div className="folder-content">
               <h3>{folder.name}</h3>
@@ -511,9 +574,11 @@ function NoteSection({
   onToggleFavorite,
   onEdit,
   onToggleMenu,
+  onToggleLock,
   expandedItems,
   favorites,
   showMenu,
+  lockedItems,
   emptyMessage, 
   emptyIcon,
   isArchive = false
@@ -547,10 +612,12 @@ function NoteSection({
               onToggleFavorite={onToggleFavorite}
               onEdit={onEdit}
               onToggleMenu={onToggleMenu}
+              onToggleLock={onToggleLock}
               isExpanded={expandedItems?.has(note.id)}
               isFavorite={favorites?.has(note.id)}
               isArchive={isArchive}
               showMenu={showMenu?.has(note.id)}
+              isLocked={lockedItems?.has(note.id)}
             />
           ))}
         </div>
@@ -568,8 +635,10 @@ function MyNotesSection({
   onToggleFavorite,
   onEdit,
   onToggleMenu,
+  onToggleLock,
   favorites,
   showMenu,
+  lockedItems,
   emptyMessage, 
   emptyIcon,
   isArchive = false
@@ -628,9 +697,43 @@ function MyNotesSection({
                     year: 'numeric' 
                   })}
                 </span>
-                <button className="edit-btn-commercial" onClick={() => onEdit(note.id)}>
-                  ✏️
-                </button>
+                <div className="note-actions-commercial">
+                  <button 
+                    className="action-btn-commercial favorite-btn" 
+                    onClick={() => onToggleFavorite(note.id)}
+                    title={favorites.has(note.id) ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    {favorites.has(note.id) ? '❤️' : '🤍'}
+                  </button>
+                  <button 
+                    className="action-btn-commercial lock-btn" 
+                    onClick={() => onToggleLock(note.id)}
+                    title={lockedItems.has(note.id) ? 'Unlock note' : 'Lock note'}
+                  >
+                    {lockedItems.has(note.id) ? '🔒' : '🔓'}
+                  </button>
+                  <button 
+                    className="action-btn-commercial archive-btn" 
+                    onClick={() => onArchive(note.id)}
+                    title={note.archived ? 'Activate note' : 'Archive note'}
+                  >
+                    {note.archived ? '📂' : '📝'}
+                  </button>
+                  <button 
+                    className="action-btn-commercial edit-btn" 
+                    onClick={() => onEdit(note.id)}
+                    title="Edit note"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="action-btn-commercial delete-btn" 
+                    onClick={() => onDelete(note.id)}
+                    title="Delete note"
+                  >
+                    🗑️
+                  </button>
+                </div>
               </div>
               
               <h3 className="note-title-commercial">{note.title}</h3>
@@ -671,10 +774,12 @@ function NoteCard({
   onToggleFavorite,
   onEdit,
   onToggleMenu,
+  onToggleLock,
   isExpanded = true,
   isFavorite = false,
   isArchive = false,
-  showMenu = false
+  showMenu = false,
+  isLocked = false
 }) {
   const handleCardClick = (event) => {
     event.stopPropagation(); // Prevent event bubbling
@@ -697,11 +802,39 @@ function NoteCard({
         </h3>
         <div className="note-actions" onClick={(e) => e.stopPropagation()}>
           <button 
+            className="action-btn favorite-btn" 
+            onClick={() => onToggleFavorite(note.id)}
+            title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          >
+            {isFavorite ? '❤️' : '🤍'}
+          </button>
+          <button 
+            className="action-btn lock-btn" 
+            onClick={() => onToggleLock(note.id)}
+            title={isLocked ? 'Unlock note' : 'Lock note'}
+          >
+            {isLocked ? '🔒' : '🔓'}
+          </button>
+          <button 
             className="action-btn archive-btn" 
             onClick={() => onArchive(note.id)}
             title={note.archived ? 'Activate note' : 'Archive note'}
           >
             {note.archived ? '📂' : '📝'}
+          </button>
+          <button 
+            className="action-btn edit-btn" 
+            onClick={() => onEdit(note.id)}
+            title="Edit note"
+          >
+            ✏️
+          </button>
+          <button 
+            className="action-btn delete-btn" 
+            onClick={() => onDelete(note.id)}
+            title="Delete note"
+          >
+            🗑️
           </button>
           <button 
             className="action-btn menu-btn" 
