@@ -251,7 +251,7 @@ function App() {
         />
           
           <NoteSection 
-            title="📝 Active Notes"
+            title="📋 Active Notes"
             notes={activeNotes}
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
@@ -266,7 +266,7 @@ function App() {
           />
           
           <NoteSection 
-            title="📂 Archived Notes"
+            title="🗃️ Archived Notes"
             notes={archivedNotes}
             onDelete={deleteNote}
             onArchive={toggleArchiveNote}
@@ -644,12 +644,6 @@ function Footer() {
           <p className="copyright">
             © 2025 Noto. Built with modern web technologies and innovative design.
           </p>
-          <div className="tech-stack">
-            <span className="tech-item">React 19</span>
-            <span className="tech-item">Vite 5</span>
-            <span className="tech-item">CSS3</span>
-            <span className="tech-item">JavaScript ES6+</span>
-          </div>
         </div>
       </div>
     </footer>

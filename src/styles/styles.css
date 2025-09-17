@@ -111,10 +111,10 @@ body::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
-    radial-gradient(circle at 60% 60%, rgba(110, 231, 183, 0.04) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 60% 60%, rgba(110, 231, 183, 0.08) 0%, transparent 50%);
   z-index: -1;
   animation: liquidMove 40s ease-in-out infinite, pulseGlow 8s ease-in-out infinite;
 }
@@ -806,16 +806,8 @@ body::after {
 }
 
 .note-card.archived.collapsed::after {
-  content: 'Click to expand';
-  position: absolute;
-  right: 1.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: var(--text-tertiary);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  pointer-events: none;
+  content: '';
+  display: none;
 }
 
 .note-card.archived.collapsed:hover {
@@ -977,8 +969,10 @@ body::after {
   padding: 0.5rem;
   display: flex;
   gap: 0.5rem;
-  z-index: 10;
+  z-index: 1000;
   animation: slideInDown 0.3s ease;
+  margin-top: 0.5rem;
+  min-width: 120px;
 }
 
 .note-actions {
@@ -1401,6 +1395,27 @@ body::after {
     font-size: 0.75rem;
   }
   
+  .note-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    right: auto;
+    margin-top: 0;
+    min-width: 200px;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    z-index: 10000;
+  }
+  
+  .note-menu .action-btn {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+  
   .filter-controls {
     flex-direction: column;
     gap: 0.75rem;
@@ -1484,6 +1499,27 @@ body::after {
   .notes-grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
+  }
+  
+  .note-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    right: auto;
+    margin-top: 0;
+    min-width: 180px;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    z-index: 10000;
+  }
+  
+  .note-menu .action-btn {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.625rem;
+    font-size: 0.8rem;
   }
   
   .filter-controls {
