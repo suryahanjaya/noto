@@ -11,16 +11,16 @@
   --accent: #34D399;
   --info: #06B6D4;
   
-  /* Light Mode - Premium Dark Tinted */
-  --bg-primary: #F0F9F4;
-  --bg-secondary: #E6F7F0;
+  /* Light Mode - Premium Soft */
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #F1F5F9;
   --bg-tertiary: #FFFFFF;
-  --text-primary: #1F2937;
-  --text-secondary: #374151;
-  --text-tertiary: #6B7280;
-  --text-muted: #9CA3AF;
-  --border: #C7D2FE;
-  --border-light: #E0E7FF;
+  --text-primary: #1E293B;
+  --text-secondary: #334155;
+  --text-tertiary: #64748B;
+  --text-muted: #94A3B8;
+  --border: #CBD5E1;
+  --border-light: #E2E8F0;
   --surface: #FFFFFF;
   --surface-elevated: #FEFEFE;
   
@@ -111,10 +111,10 @@ body::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 60% 60%, rgba(110, 231, 183, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 60% 60%, rgba(110, 231, 183, 0.04) 0%, transparent 50%);
   z-index: -1;
   animation: liquidMove 40s ease-in-out infinite, pulseGlow 8s ease-in-out infinite;
 }
@@ -950,6 +950,41 @@ body::after {
   box-shadow: 0 4px 16px 0 rgba(255, 193, 7, 0.3);
 }
 
+/* Menu Button */
+.menu-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.menu-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+/* Note Menu */
+.note-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+  animation: slideInDown 0.3s ease;
+}
+
+.note-actions {
+  position: relative;
+}
+
 .favorite-btn {
   background: rgba(5, 150, 105, 0.8);
   color: white;
@@ -1069,8 +1104,8 @@ body::after {
 
 /* Ultra Elegant Footer */
 .app-footer {
-  margin-top: 3rem;
-  padding: 1.5rem 0;
+  margin-top: 2rem;
+  padding: 1rem 0;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -1096,15 +1131,15 @@ body::after {
 }
 
 .footer-brand {
-  text-align: center;
-  margin-bottom: 2rem;
+  text-align: left;
+  margin-bottom: 1rem;
   animation: fadeInUp 0.8s var(--bounce);
 }
 
 .footer-logo {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.75rem;
   margin-bottom: 1rem;
   font-size: 2rem;
@@ -1140,7 +1175,7 @@ body::after {
   width: 100px;
   height: 2px;
   background: var(--gradient-accent);
-  margin: 0 auto 2rem;
+  margin: 0 0 1rem;
   border-radius: 1px;
 }
 
@@ -1149,7 +1184,7 @@ body::after {
   grid-template-columns: 1fr auto;
   gap: 2rem;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .developer-info {

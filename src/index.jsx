@@ -23,6 +23,7 @@ function App() {
   const [editingNote, setEditingNote] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
+  const [showMenu, setShowMenu] = useState(new Set());
 
   // Apply theme
   React.useEffect(() => {
@@ -82,6 +83,17 @@ function App() {
     setEditingNote(null);
     setEditTitle('');
     setEditBody('');
+  };
+
+  // Fungsi untuk toggle menu tombol
+  const toggleMenu = (id) => {
+    const newShowMenu = new Set(showMenu);
+    if (newShowMenu.has(id)) {
+      newShowMenu.delete(id);
+    } else {
+      newShowMenu.add(id);
+    }
+    setShowMenu(newShowMenu);
   };
 
   // Fungsi untuk mengarsipkan/mengaktifkan catatan
@@ -245,7 +257,9 @@ function App() {
             onArchive={toggleArchiveNote}
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
+            onToggleMenu={toggleMenu}
             favorites={favorites}
+            showMenu={showMenu}
             emptyMessage="No active notes yet"
             emptyIcon="📝"
             isArchive={false}
@@ -259,8 +273,10 @@ function App() {
             onToggleExpand={toggleExpandArchive}
             onToggleFavorite={toggleFavorite}
             onEdit={startEditNote}
+            onToggleMenu={toggleMenu}
             expandedItems={expandedArchives}
             favorites={favorites}
+            showMenu={showMenu}
             emptyMessage="No archived notes yet"
             emptyIcon="📂"
             isArchive={true}
@@ -428,8 +444,10 @@ function NoteSection({
   onToggleExpand,
   onToggleFavorite,
   onEdit,
+  onToggleMenu,
   expandedItems,
   favorites,
+  showMenu,
   emptyMessage, 
   emptyIcon,
   isArchive = false
@@ -462,9 +480,11 @@ function NoteSection({
               onToggleExpand={onToggleExpand}
               onToggleFavorite={onToggleFavorite}
               onEdit={onEdit}
+              onToggleMenu={onToggleMenu}
               isExpanded={expandedItems?.has(note.id)}
               isFavorite={favorites?.has(note.id)}
               isArchive={isArchive}
+              showMenu={showMenu?.has(note.id)}
             />
           ))}
         </div>
@@ -481,9 +501,11 @@ function NoteCard({
   onToggleExpand,
   onToggleFavorite,
   onEdit,
+  onToggleMenu,
   isExpanded = true,
   isFavorite = false,
-  isArchive = false 
+  isArchive = false,
+  showMenu = false
 }) {
   const handleCardClick = (event) => {
     event.stopPropagation(); // Prevent event bubbling
@@ -506,20 +528,6 @@ function NoteCard({
         </h3>
         <div className="note-actions" onClick={(e) => e.stopPropagation()}>
           <button 
-            className={`action-btn favorite-btn ${isFavorite ? 'favorited' : ''}`}
-            onClick={() => onToggleFavorite(note.id)}
-            title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          >
-            {isFavorite ? '❤️' : '🤍'}
-          </button>
-          <button 
-            className="action-btn edit-btn" 
-            onClick={() => onEdit(note)}
-            title="Edit note"
-          >
-            ✏️
-          </button>
-          <button 
             className="action-btn archive-btn" 
             onClick={() => onArchive(note.id)}
             title={note.archived ? 'Activate note' : 'Archive note'}
@@ -527,12 +535,38 @@ function NoteCard({
             {note.archived ? '📂' : '📝'}
           </button>
           <button 
-            className="action-btn delete-btn" 
-            onClick={() => onDelete(note.id)}
-            title="Delete note"
+            className="action-btn menu-btn" 
+            onClick={() => onToggleMenu(note.id)}
+            title="More options"
           >
-            🗑️
+            ⋯
           </button>
+          
+          {showMenu && (
+            <div className="note-menu">
+              <button 
+                className="action-btn favorite-btn" 
+                onClick={() => onToggleFavorite(note.id)}
+                title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                {isFavorite ? '❤️' : '🤍'}
+              </button>
+              <button 
+                className="action-btn edit-btn" 
+                onClick={() => onEdit(note)}
+                title="Edit note"
+              >
+                ✏️
+              </button>
+              <button 
+                className="action-btn delete-btn" 
+                onClick={() => onDelete(note.id)}
+                title="Delete note"
+              >
+                🗑️
+              </button>
+            </div>
+          )}
         </div>
       </div>
       
@@ -564,11 +598,9 @@ function Footer() {
           </p>
         </div>
         
-        <div className="footer-divider"></div>
-        
         <div className="footer-info">
           <div className="developer-info">
-            <h4>Created with ❤️ by</h4>
+            <h4>Developed by</h4>
             <div className="developer-name">Surya Hanjaya</div>
             <div className="developer-title">AI Researcher • Full-Stack Developer</div>
             <div className="developer-education">Informatics Engineering '23 • Universitas Negeri Surabaya</div>
@@ -610,7 +642,7 @@ function Footer() {
         
         <div className="footer-bottom">
           <p className="copyright">
-            © 2024 Noto. Made with modern web technologies and lots of creativity.
+            © 2025 Noto. Built with modern web technologies and innovative design.
           </p>
           <div className="tech-stack">
             <span className="tech-item">React 19</span>
