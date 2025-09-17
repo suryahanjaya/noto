@@ -477,21 +477,28 @@ body::after {
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 3rem;
+  width: 100%;
 }
 
 .left-section {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
 .right-section {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
 /* Note Input in Side Layout */
 .left-section .note-input {
   margin-bottom: 0;
+  width: 100%;
+  min-width: 0;
 }
 
 .left-section .note-input h2 {
@@ -501,22 +508,28 @@ body::after {
 
 .left-section .note-form {
   gap: 1rem;
+  width: 100%;
 }
 
 .left-section .note-form input,
 .left-section .note-form textarea {
   font-size: 0.9rem;
   padding: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .left-section .submit-btn {
   padding: 0.75rem 1.5rem;
   font-size: 0.9rem;
+  width: fit-content;
 }
 
 /* Recent Folders Section */
 .recent-folders-section {
   margin-bottom: 0;
+  width: 100%;
+  min-width: 0;
 }
 
 .recent-folders-section .section-header {
@@ -571,6 +584,7 @@ body::after {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  width: 100%;
 }
 
 .folder-card {
@@ -580,6 +594,8 @@ body::after {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
+  width: 100%;
+  min-width: 0;
 }
 
 .folder-card:hover {
