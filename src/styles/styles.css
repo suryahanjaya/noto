@@ -11,24 +11,24 @@
   --accent: #34D399;
   --info: #06B6D4;
   
-  /* Light Mode - Premium Green Tinted */
-  --bg-primary: #F0FDF4;
-  --bg-secondary: #ECFDF5;
+  /* Light Mode - Soft Green Tinted */
+  --bg-primary: #F8FFFE;
+  --bg-secondary: #F1FDF9;
   --bg-tertiary: #FFFFFF;
-  --text-primary: #064E3B;
-  --text-secondary: #047857;
-  --text-tertiary: #059669;
-  --text-muted: #6EE7B7;
-  --border: #A7F3D0;
-  --border-light: #D1FAE5;
+  --text-primary: #1F2937;
+  --text-secondary: #374151;
+  --text-tertiary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border: #D1D5DB;
+  --border-light: #E5E7EB;
   --surface: #FFFFFF;
-  --surface-elevated: #F9FFFE;
+  --surface-elevated: #FEFEFE;
   
   /* Glass Effect - Enhanced */
-  --glass-bg: rgba(255, 255, 255, 0.9);
-  --glass-border: rgba(167, 243, 208, 0.3);
-  --glass-shadow: 0 8px 32px 0 rgba(5, 150, 105, 0.08);
-  --glass-blur: blur(20px);
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  --glass-blur: blur(16px);
   
   /* Premium Green Gradients */
   --gradient-primary: linear-gradient(135deg, #059669 0%, #047857 100%);
@@ -319,13 +319,13 @@ body::after {
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  background: var(--glass-bg);
-  border-bottom: 1px solid var(--border-light);
-  padding: 1.5rem 0;
-  margin-bottom: 3rem;
-  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   animation: slideInDown 0.6s var(--bounce);
   transition: all var(--transition-normal);
 }
@@ -417,13 +417,14 @@ body::after {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin: 1.5rem 0;
-  padding: 1rem 1.5rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -480,7 +481,7 @@ body::after {
 
 /* Search Bar */
 .search-section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .search-container {
@@ -495,15 +496,15 @@ body::after {
 
 .search-bar input {
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   font-size: 1rem;
-  color: var(--dark);
+  color: var(--text-primary);
   transition: all 0.3s ease;
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .search-bar input:focus {
@@ -529,13 +530,16 @@ body::after {
 
 /* Note Input Form */
 .note-input {
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  box-shadow: var(--glass-shadow);
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
 .note-input h2 {
@@ -689,11 +693,13 @@ body::after {
 
 /* Note Card with Advanced Animations */
 .note-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-md);
+  padding: 1.25rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
@@ -987,10 +993,12 @@ body::after {
 
 /* Ultra Elegant Footer */
 .app-footer {
-  margin-top: 4rem;
-  padding: 2rem 0 1.5rem;
-  background: var(--surface);
-  border-top: 1px solid var(--border-light);
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
 }
