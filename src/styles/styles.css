@@ -848,8 +848,8 @@ body::after {
   top: 0;
   left: 0;
   width: 100%;
-  height: 3px;
-  background: var(--gradient-accent);
+  height: 0px;
+  background: transparent;
 }
 
 .note-card.archived {
@@ -857,7 +857,7 @@ body::after {
 }
 
 .note-card.archived::before {
-  background: var(--gradient-secondary);
+  background: transparent;
 }
 
 .note-card:hover {
@@ -1209,8 +1209,8 @@ body::after {
   top: 0;
   left: 0;
   width: 100%;
-  height: 1px;
-  background: var(--gradient-accent);
+  height: 0px;
+  background: transparent;
 }
 
 .footer-content {
@@ -1269,8 +1269,8 @@ body::after {
 
 .footer-divider {
   width: 100px;
-  height: 2px;
-  background: var(--gradient-accent);
+  height: 0px;
+  background: transparent;
   margin: 0 0 1rem;
   border-radius: 1px;
 }
