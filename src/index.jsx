@@ -342,7 +342,7 @@ function App() {
         </div>
       )}
       
-      <Footer />
+      <Footer searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} />
     </>
   );
 }
@@ -892,13 +892,22 @@ function NoteCard({
 }
 
 // Simple Footer
-function Footer() {
+function Footer({ searchKeyword, setSearchKeyword }) {
   return (
     <footer className="app-footer">
       <div className="footer-content">
         <div className="footer-brand">
-          <span className="footer-logo">Noto</span>
-          <span className="footer-tagline">Beautiful notes for modern generation</span>
+          <div className="footer-logo-icon">N</div>
+          <div className="footer-search-container">
+            <div className="footer-search-icon">🔍</div>
+            <input
+              type="text"
+              placeholder="Search notes..."
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              className="footer-search-input"
+            />
+          </div>
         </div>
         
         <div className="footer-info">
