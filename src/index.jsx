@@ -364,7 +364,7 @@ function NoteInput({ title, setTitle, body, setBody, addNote }) {
           />
         </div>
         <button type="submit" className="submit-btn">
-          ✨ Save Note
+            Save Note
         </button>
       </form>
     </section>
