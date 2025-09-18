@@ -656,9 +656,11 @@ function RecentFoldersSection({
               </div>
             </div>
             <div className="folder-content" onClick={() => onFolderClick(folder.id)}>
-              <h3>{folder.name}</h3>
-              <p>{folder.date}</p>
-              <p className="note-count">{folder.noteCount} notes</p>
+              <h3 className="folder-title">{folder.name}</h3>
+              <p className="folder-subtitle">{folder.date}</p>
+              <div className="folder-stats">
+                <span className="note-count">{folder.noteCount} notes</span>
+              </div>
             </div>
           </div>
         ))}
@@ -927,33 +929,45 @@ function MyNotesSection({
                 </span>
                 <div className="note-actions-commercial">
                   <button 
-                    className="action-btn-commercial favorite-btn" 
-                    onClick={() => onToggleFavorite(note.id)}
-                    title={favorites.has(note.id) ? 'Remove from favorites' : 'Add to favorites'}
-                  >
-                    {favorites.has(note.id) ? '❤️' : '🤍'}
-                  </button>
-          <button 
                     className="action-btn-commercial archive-btn" 
-            onClick={() => onArchive(note.id)}
+                    onClick={() => onArchive(note.id)}
                     title={note.archived ? 'Activate note' : 'Archive note'}
                   >
-                    {note.archived ? '📂' : '📝'}
+                    {note.archived ? '📂' : '📦'}
                   </button>
                   <button 
-                    className="action-btn-commercial edit-btn" 
-                    onClick={() => onEdit(note)}
-                    title="Edit note"
+                    className="action-btn-commercial menu-btn" 
+                    onClick={() => onToggleMenu(note.id)}
+                    title="More options"
                   >
-                    ✏️
-          </button>
-          <button 
-                    className="action-btn-commercial delete-btn" 
-            onClick={() => onDelete(note.id)}
-                    title="Delete note"
-          >
-                    🗑️
-          </button>
+                    ⋯
+                  </button>
+                  
+                  {showMenu && showMenu.has(note.id) && (
+                    <div className="note-menu-commercial">
+                      <button 
+                        className="action-btn-commercial favorite-btn" 
+                        onClick={() => onToggleFavorite(note.id)}
+                        title={favorites.has(note.id) ? 'Remove from favorites' : 'Add to favorites'}
+                      >
+                        {favorites.has(note.id) ? '❤️' : '🤍'}
+                      </button>
+                      <button 
+                        className="action-btn-commercial edit-btn" 
+                        onClick={() => onEdit(note)}
+                        title="Edit note"
+                      >
+                        ✏️
+                      </button>
+                      <button 
+                        className="action-btn-commercial delete-btn" 
+                        onClick={() => onDelete(note.id)}
+                        title="Delete note"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  )}
         </div>
       </div>
               
@@ -1026,7 +1040,7 @@ function NoteCard({
             onClick={() => onArchive(note.id)}
             title={note.archived ? 'Activate note' : 'Archive note'}
           >
-            {note.archived ? '📂' : '📝'}
+            {note.archived ? '📂' : '📦'}
           </button>
           <button 
             className="action-btn menu-btn" 
