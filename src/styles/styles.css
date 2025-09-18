@@ -583,15 +583,15 @@ body::after {
 
 /* Dark mode: semua folder mengikuti Movie Review (blue/primary) */
 [data-theme="dark"] .folder-card.blue {
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
 }
 
 [data-theme="dark"] .folder-card.pink {
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%);
 }
 
 [data-theme="dark"] .folder-card.yellow {
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
 }
 
 .folder-header {
@@ -870,9 +870,9 @@ body::after {
 
 /* Dark mode favorite untuk note-card-commercial */
 [data-theme="dark"] .note-card-commercial.favorite {
-  background: linear-gradient(135deg, #FFE082 0%, #FFC107 50%, #FF8F00 100%) !important;
-  border: 1px solid rgba(255, 193, 7, 0.6) !important;
-  box-shadow: 0 8px 32px 0 rgba(255, 193, 7, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 50%, #1B5E20 100%) !important;
+  border: 1px solid rgba(76, 175, 80, 0.6) !important;
+  box-shadow: 0 8px 32px 0 rgba(76, 175, 80, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
 }
 
 .note-header-commercial {
@@ -1135,6 +1135,12 @@ body::after {
   animation: slideInUp 0.3s ease;
 }
 
+/* Dark mode untuk folder popup */
+[data-theme="dark"] .folder-popup {
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+  color: white;
+}
+
 .folder-popup-header {
   display: flex;
   justify-content: space-between;
@@ -1148,6 +1154,15 @@ body::after {
   margin: 0;
   color: #333;
   font-size: 1.5rem;
+}
+
+/* Dark mode untuk folder popup header */
+[data-theme="dark"] .folder-popup-header h3 {
+  color: white;
+}
+
+[data-theme="dark"] .folder-popup-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .close-btn {
@@ -1166,9 +1181,24 @@ body::after {
   color: #333;
 }
 
+/* Dark mode untuk close button */
+[data-theme="dark"] .close-btn {
+  color: white;
+}
+
+[data-theme="dark"] .close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
 .folder-popup-content {
   color: #666;
   line-height: 1.6;
+}
+
+/* Dark mode untuk folder popup content */
+[data-theme="dark"] .folder-popup-content {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* Folder Notes Popup */
@@ -1528,6 +1558,17 @@ body::after {
   margin-bottom: 1.5rem;
 }
 
+/* Dark mode untuk edit modal */
+[data-theme="dark"] .edit-modal {
+  background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: white;
+}
+
+[data-theme="dark"] .edit-modal h2 {
+  color: #4CAF50;
+}
+
 /* Input Label */
 .input-label {
   display: block;
@@ -1792,9 +1833,9 @@ body::after {
   background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%);
 }
 
-/* Archive notes: dark mode menggunakan gradient hijau yang lebih tua */
+/* Archive notes: dark mode menggunakan gradient hijau transparan */
 [data-theme="dark"] .note-card.archived {
-  background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.3) 0%, rgba(56, 142, 60, 0.3) 100%);
 }
 
 .note-card.archived::before {
@@ -1829,7 +1870,7 @@ body::after {
 
 /* Dark mode untuk archived collapsed */
 [data-theme="dark"] .note-card.archived.collapsed {
-  background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
+  background: linear-gradient(135deg, #1B5E20 0%, #0D4A0F 100%);
 }
 
 .note-card.archived.collapsed .note-body {
