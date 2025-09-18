@@ -1200,6 +1200,7 @@ body::after {
   background: var(--surface-elevated);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
+  border-color: var(--accent);
 }
 
 .note-info h5 {

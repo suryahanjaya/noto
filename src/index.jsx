@@ -204,7 +204,7 @@ function App() {
   const [sortBy, setSortBy] = useState('newest');
   const [filterBy, setFilterBy] = useState('all');
   const [expandedArchives, setExpandedArchives] = useState(new Set());
-  const [favorites, setFavorites] = useState(new Set());
+  const [favorites, setFavorites] = useState(new Set([1001, 2001, 9001])); // Default favorites: 2 My Notes + 1 Archived
   const [selectedTag, setSelectedTag] = useState('all');
   const [editingNote, setEditingNote] = useState(null);
   const [editTitle, setEditTitle] = useState('');
@@ -458,6 +458,34 @@ function App() {
         ? { ...note, folderId: null }
         : note
     ));
+  };
+
+  // Fungsi untuk scroll ke notes yang diklik dari folder popup
+  const scrollToNote = (noteId) => {
+    // Close folder popup first
+    closeFolderPopup();
+    
+    // Wait a bit for popup to close, then scroll to note
+    setTimeout(() => {
+      const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+      if (noteElement) {
+        noteElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+        
+        // Add highlight effect
+        noteElement.style.transition = 'all 0.3s ease';
+        noteElement.style.transform = 'scale(1.02)';
+        noteElement.style.boxShadow = '0 8px 32px rgba(103, 174, 110, 0.4)';
+        
+        // Remove highlight after 2 seconds
+        setTimeout(() => {
+          noteElement.style.transform = 'scale(1)';
+          noteElement.style.boxShadow = '';
+        }, 2000);
+      }
+    }, 300);
   };
 
 
@@ -776,13 +804,13 @@ function App() {
                     <p className="no-notes">No notes in this folder</p>
                   ) : (
                     getNotesInFolder(showFolderPopup).map(note => (
-                      <div key={note.id} className="folder-note-item">
+                      <div key={note.id} className="folder-note-item" onClick={() => scrollToNote(note.id)} style={{ cursor: 'pointer' }}>
                         <div className="note-info">
                           <h5>{note.title}</h5>
                           <p>{note.body.substring(0, 100)}...</p>
                           <span className="note-date">{new Date(note.createdAt).toLocaleDateString()}</span>
                         </div>
-                        <div className="note-actions">
+                        <div className="note-actions" onClick={(e) => e.stopPropagation()}>
                           <button 
                             className="btn btn-danger btn-sm"
                             onClick={() => removeNoteFromFolder(note.id)}
@@ -1155,7 +1183,7 @@ function MyNotesSection({
       ) : (
         <div className="notes-grid">
           {notes.map((note, index) => (
-            <div key={note.id} className={`note-card-commercial ${getNoteColor(index)} ${favorites.has(note.id) ? 'favorite' : ''}`}>
+            <div key={note.id} className={`note-card-commercial ${getNoteColor(index)} ${favorites.has(note.id) ? 'favorite' : ''}`} data-note-id={note.id}>
               <div className="note-header-commercial">
                 <span className="note-date-commercial">
                   {new Date(note.createdAt).toLocaleDateString('en-US', { 
@@ -1259,6 +1287,7 @@ function NoteCard({
       className={`note-card ${note.archived ? 'archived' : ''} ${isCollapsed ? 'collapsed' : ''} ${isFavorite ? 'favorite' : ''}`}
       onClick={isArchive ? handleCardClick : undefined}
       style={{ cursor: isArchive ? 'pointer' : 'default' }}
+      data-note-id={note.id}
     >
       <div className="note-header">
         <h3 className="note-title">
