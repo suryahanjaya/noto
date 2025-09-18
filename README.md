@@ -11,7 +11,7 @@
 [![CSS3](https://img.shields.io/badge/CSS3-Advanced-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-67AE6E?style=for-the-badge)](https://noto-notes-app.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Available-67AE6E?style=for-the-badge)](https://noto-suryahanjaya.vercel.app/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 </div>
@@ -345,8 +345,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Made with ❤️ for the digital generation**
 
 *Noto - Where beauty meets functionality*
-
-[![Star](https://img.shields.io/github/stars/suryahanjaya/noto-notes-app?style=social)](https://github.com/suryahanjaya/noto-notes-app)
-[![Fork](https://img.shields.io/github/forks/suryahanjaya/noto-notes-app?style=social)](https://github.com/suryahanjaya/noto-notes-app)
 
 </div>
