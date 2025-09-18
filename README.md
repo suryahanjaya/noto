@@ -346,7 +346,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *Noto - Where beauty meets functionality*
 
-[![Star](https://img.shields.io/github/stars/suryahanjaya/noto-notes-app?style=social)](https://github.com/suryahanjaya/noto)
-[![Fork](https://img.shields.io/github/forks/suryahanjaya/noto-notes-app?style=social)](https://github.com/suryahanjaya/noto)
-
 </div>
