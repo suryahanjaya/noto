@@ -6,7 +6,142 @@ import { getInitialData, showFormattedDate } from './utils/index.js';
 import './styles/styles.css';
 
 // Data awal catatan dari utils
-const initialNotes = getInitialData();
+const initialNotes = [
+  ...getInitialData(),
+  // Movie Review folder notes
+  {
+    id: 1001,
+    title: "Inception Review",
+    body: "Christopher Nolan's masterpiece about dreams within dreams. The cinematography is stunning and the plot is mind-bending. Leonardo DiCaprio delivers an excellent performance as Dom Cobb.",
+    archived: false,
+    createdAt: new Date('2024-01-15').toISOString(),
+    folderId: 1
+  },
+  {
+    id: 1002,
+    title: "The Dark Knight Analysis",
+    body: "Heath Ledger's Joker is one of the greatest villain performances in cinema history. The film explores themes of chaos vs order, and the moral complexity of heroism.",
+    archived: false,
+    createdAt: new Date('2024-01-20').toISOString(),
+    folderId: 1
+  },
+  {
+    id: 1003,
+    title: "Interstellar Thoughts",
+    body: "A beautiful exploration of love transcending time and space. The science is mostly accurate and the emotional core is powerful. Hans Zimmer's score is phenomenal.",
+    archived: false,
+    createdAt: new Date('2024-02-01').toISOString(),
+    folderId: 1
+  },
+  {
+    id: 1004,
+    title: "Parasite Review",
+    body: "Bong Joon-ho's social commentary masterpiece. The film brilliantly exposes class inequality through a thrilling and darkly comedic narrative.",
+    archived: false,
+    createdAt: new Date('2024-02-10').toISOString(),
+    folderId: 1
+  },
+  {
+    id: 1005,
+    title: "Spirited Away Analysis",
+    body: "Hayao Miyazaki's magical journey into the spirit world. The animation is breathtaking and the story teaches valuable lessons about courage and self-discovery.",
+    archived: false,
+    createdAt: new Date('2024-02-15').toISOString(),
+    folderId: 1
+  },
+  
+  // Class Notes folder notes
+  {
+    id: 2001,
+    title: "React Hooks Fundamentals",
+    body: "useState, useEffect, useContext, useReducer, useMemo, useCallback. Understanding when and how to use each hook is crucial for modern React development.",
+    archived: false,
+    createdAt: new Date('2024-01-10').toISOString(),
+    folderId: 2
+  },
+  {
+    id: 2002,
+    title: "JavaScript ES6+ Features",
+    body: "Arrow functions, destructuring, template literals, spread operator, async/await, modules. These features make JavaScript more powerful and readable.",
+    archived: false,
+    createdAt: new Date('2024-01-12').toISOString(),
+    folderId: 2
+  },
+  {
+    id: 2003,
+    title: "CSS Grid vs Flexbox",
+    body: "Grid is for 2D layouts, Flexbox is for 1D layouts. Grid is better for complex page layouts, Flexbox is better for component layouts.",
+    archived: false,
+    createdAt: new Date('2024-01-18').toISOString(),
+    folderId: 2
+  },
+  {
+    id: 2004,
+    title: "Node.js Backend Development",
+    body: "Express.js framework, middleware, routing, error handling, authentication with JWT, database integration with MongoDB/PostgreSQL.",
+    archived: false,
+    createdAt: new Date('2024-01-25').toISOString(),
+    folderId: 2
+  },
+  {
+    id: 2005,
+    title: "Database Design Principles",
+    body: "Normalization, relationships (1:1, 1:many, many:many), indexing, query optimization, ACID properties, NoSQL vs SQL databases.",
+    archived: false,
+    createdAt: new Date('2024-02-05').toISOString(),
+    folderId: 2
+  },
+  {
+    id: 2006,
+    title: "Git Version Control",
+    body: "Branching strategies, merge vs rebase, conflict resolution, GitHub workflows, pull requests, code review best practices.",
+    archived: false,
+    createdAt: new Date('2024-02-08').toISOString(),
+    folderId: 2
+  },
+  {
+    id: 2007,
+    title: "API Design Best Practices",
+    body: "RESTful principles, HTTP methods, status codes, authentication, rate limiting, documentation with Swagger/OpenAPI, versioning strategies.",
+    archived: false,
+    createdAt: new Date('2024-02-12').toISOString(),
+    folderId: 2
+  },
+  {
+    id: 2008,
+    title: "Testing Strategies",
+    body: "Unit testing with Jest, integration testing, end-to-end testing with Cypress, test-driven development (TDD), mocking and stubbing.",
+    archived: false,
+    createdAt: new Date('2024-02-18').toISOString(),
+    folderId: 2
+  },
+  
+  // Book Lists folder notes
+  {
+    id: 3001,
+    title: "Clean Code by Robert Martin",
+    body: "Essential reading for any developer. Covers principles of writing maintainable, readable code. Focus on meaningful names, small functions, and proper commenting.",
+    archived: false,
+    createdAt: new Date('2024-01-05').toISOString(),
+    folderId: 3
+  },
+  {
+    id: 3002,
+    title: "Design Patterns by Gang of Four",
+    body: "Classic book on software design patterns. Covers creational, structural, and behavioral patterns. Essential for understanding object-oriented design principles.",
+    archived: false,
+    createdAt: new Date('2024-01-22').toISOString(),
+    folderId: 3
+  },
+  {
+    id: 3003,
+    title: "You Don't Know JS Series",
+    body: "Deep dive into JavaScript fundamentals. Covers scope, closures, this keyword, prototypes, async programming. Must-read for serious JavaScript developers.",
+    archived: false,
+    createdAt: new Date('2024-02-03').toISOString(),
+    folderId: 3
+  }
+];
 
 // Komponen utama App
 function App() {
@@ -28,9 +163,9 @@ function App() {
   const [showFolderMenu, setShowFolderMenu] = useState(new Set());
   const [showFolderPopup, setShowFolderPopup] = useState(null);
   const [folders, setFolders] = useState([
-    { id: 1, name: 'Movie Review', date: '12/12/2021', color: 'blue', noteCount: 5 },
-    { id: 2, name: 'Class Notes', date: '12/12/2021', color: 'pink', noteCount: 8 },
-    { id: 3, name: 'Book Lists', date: '12/12/2021', color: 'yellow', noteCount: 3 },
+    { id: 1, name: 'Movie Review', date: '12/12/2021', color: 'blue', noteCount: 0 },
+    { id: 2, name: 'Class Notes', date: '12/12/2021', color: 'pink', noteCount: 0 },
+    { id: 3, name: 'Book Lists', date: '12/12/2021', color: 'yellow', noteCount: 0 },
   ]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
@@ -215,6 +350,11 @@ function App() {
     return notes.filter(note => note.folderId === folderId);
   };
 
+  // Fungsi untuk menghitung jumlah notes dalam folder
+  const getNoteCountInFolder = (folderId) => {
+    return notes.filter(note => note.folderId === folderId).length;
+  };
+
   // Fungsi untuk scroll ke catatan
   const scrollToNote = (noteId) => {
     const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
@@ -237,6 +377,25 @@ function App() {
       setShowFolderNotes(true);
       setSelectedFolderId(folderId);
     }
+  };
+
+
+  // Fungsi untuk memindahkan catatan ke folder
+  const moveNoteToFolder = (noteId, folderId) => {
+    setNotes(notes.map(note => 
+      note.id === noteId 
+        ? { ...note, folderId: folderId }
+        : note
+    ));
+  };
+
+  // Fungsi untuk menghapus catatan dari folder
+  const removeNoteFromFolder = (noteId) => {
+    setNotes(notes.map(note => 
+      note.id === noteId 
+        ? { ...note, folderId: null }
+        : note
+    ));
   };
 
   // Fungsi untuk klik catatan dari folder
@@ -394,6 +553,8 @@ function App() {
               onNoteClick={handleNoteClick}
               showFolderMenu={showFolderMenu}
               onToggleFolderMenu={toggleFolderMenu}
+              onOpenFolderPopup={openFolderPopup}
+              getNoteCountInFolder={getNoteCountInFolder}
             />
           </div>
         </div>
@@ -462,20 +623,6 @@ function App() {
       </main>
     </div>
       
-      {/* Folder Popup Modal */}
-      {showFolderPopup && (
-        <div className="folder-popup-overlay" onClick={closeFolderPopup}>
-          <div className="folder-popup" onClick={(e) => e.stopPropagation()}>
-            <div className="folder-popup-header">
-              <h3>Folder Notes</h3>
-              <button className="close-btn" onClick={closeFolderPopup}>✕</button>
-            </div>
-            <div className="folder-popup-content">
-              <p>Notes in this folder will appear here...</p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Create Folder Modal */}
       {showCreateFolderModal && (
@@ -560,6 +707,72 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Folder Notes Popup */}
+      {showFolderPopup && (
+        <div className="folder-popup-overlay" onClick={closeFolderPopup}>
+          <div className="folder-popup folder-notes-popup" onClick={(e) => e.stopPropagation()}>
+            <div className="folder-popup-header">
+              <h3>📁 {folders.find(f => f.id === showFolderPopup)?.name || 'Unknown Folder'}</h3>
+              <button className="close-btn" onClick={closeFolderPopup}>✕</button>
+            </div>
+            <div className="folder-popup-content">
+              <div className="folder-notes-section">
+                <h4>Notes in this folder ({getNotesInFolder(showFolderPopup).length})</h4>
+                <div className="folder-notes-list">
+                  {getNotesInFolder(showFolderPopup).length === 0 ? (
+                    <p className="no-notes">No notes in this folder</p>
+                  ) : (
+                    getNotesInFolder(showFolderPopup).map(note => (
+                      <div key={note.id} className="folder-note-item">
+                        <div className="note-info">
+                          <h5>{note.title}</h5>
+                          <p>{note.body.substring(0, 100)}...</p>
+                          <span className="note-date">{new Date(note.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div className="note-actions">
+                          <button 
+                            className="btn btn-danger btn-sm"
+                            onClick={() => removeNoteFromFolder(note.id)}
+                            title="Remove from folder"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+              
+              <div className="add-notes-section">
+                <h4>Add existing notes to this folder</h4>
+                <div className="available-notes-list">
+                  {notes.filter(note => note.folderId !== showFolderPopup).length === 0 ? (
+                    <p className="no-notes">All notes are already in folders</p>
+                  ) : (
+                    notes.filter(note => note.folderId !== showFolderPopup).map(note => (
+                      <div key={note.id} className="available-note-item">
+                        <div className="note-info">
+                          <h5>{note.title}</h5>
+                          <p>{note.body.substring(0, 80)}...</p>
+                        </div>
+                        <button 
+                          className="btn btn-primary btn-sm"
+                          onClick={() => moveNoteToFolder(note.id, showFolderPopup)}
+                          title="Add to folder"
+                        >
+                          ➕
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       <Footer />
     </>
@@ -610,7 +823,9 @@ function RecentFoldersSection({
   folderNotes,
   onNoteClick,
   showFolderMenu,
-  onToggleFolderMenu
+  onToggleFolderMenu,
+  onOpenFolderPopup,
+  getNoteCountInFolder
 }) {
   return (
     <section className="recent-folders-section">
@@ -655,11 +870,11 @@ function RecentFoldersSection({
                 )}
               </div>
             </div>
-            <div className="folder-content" onClick={() => onFolderClick(folder.id)}>
+            <div className="folder-content" onClick={() => onOpenFolderPopup(folder.id)}>
               <h3 className="folder-title">{folder.name}</h3>
               <p className="folder-subtitle">{folder.date}</p>
               <div className="folder-stats">
-                <span className="note-count">{folder.noteCount} notes</span>
+                <span className="note-count">{getNoteCountInFolder(folder.id)} notes</span>
               </div>
             </div>
           </div>
@@ -719,14 +934,14 @@ function FilterControls({
       <div className="filter-group">
         <div className="search-container">
           <div className="search-icon">🔍</div>
-          <input
-            type="text"
+      <input
+        type="text"
             placeholder="Search"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
+        value={searchKeyword}
+        onChange={(e) => setSearchKeyword(e.target.value)}
             className="search-input"
-          />
-        </div>
+      />
+    </div>
       </div>
       
       <div className="filter-group">
@@ -994,7 +1209,7 @@ function MyNotesSection({
               <span>New Note</span>
             </div>
           </div>
-        </div>
+    </div>
       )}
     </section>
   );
@@ -1065,15 +1280,15 @@ function NoteCard({
                 title="Edit note"
               >
                 ✏️
-              </button>
-              <button 
+          </button>
+          <button 
                 className="action-btn delete-btn" 
-                onClick={() => onDelete(note.id)}
+            onClick={() => onDelete(note.id)}
                 title="Delete note"
-              >
+          >
                 🗑️
-              </button>
-            </div>
+          </button>
+        </div>
           )}
         </div>
       </div>
@@ -1104,7 +1319,7 @@ function Footer() {
           <p className="footer-tagline">
             Simple notes app for modern productivity
           </p>
-        </div>
+      </div>
         
         <div className="footer-bottom">
           <p className="copyright">
