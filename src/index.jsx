@@ -223,8 +223,6 @@ function App() {
   const [newFolderName, setNewFolderName] = useState('');
   const [editingFolder, setEditingFolder] = useState(null);
   const [editFolderName, setEditFolderName] = useState('');
-  const [showFolderNotes, setShowFolderNotes] = useState(false);
-  const [selectedFolderId, setSelectedFolderId] = useState(null);
 
   // Apply theme and save to localStorage
   useEffect(() => {
@@ -441,29 +439,7 @@ function App() {
     return notes.filter(note => note.folderId === folderId).length;
   };
 
-  // Fungsi untuk scroll ke catatan
-  const scrollToNote = (noteId) => {
-    const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
-    if (noteElement) {
-      noteElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // Add highlight effect
-      noteElement.style.animation = 'glow 2s ease-in-out';
-      setTimeout(() => {
-        noteElement.style.animation = '';
-      }, 2000);
-    }
-  };
 
-  // Fungsi untuk menampilkan catatan dalam folder
-  const showFolderNotesList = (folderId) => {
-    if (folderId === selectedFolderId) {
-      setShowFolderNotes(false);
-      setSelectedFolderId(null);
-    } else {
-      setShowFolderNotes(true);
-      setSelectedFolderId(folderId);
-    }
-  };
 
 
   // Fungsi untuk memindahkan catatan ke folder
@@ -484,12 +460,6 @@ function App() {
     ));
   };
 
-  // Fungsi untuk klik catatan dari folder
-  const handleNoteClick = (noteId) => {
-    scrollToNote(noteId);
-    setShowFolderNotes(false);
-    setSelectedFolderId(null);
-  };
 
   // Fungsi untuk mengarsipkan/mengaktifkan catatan
   const toggleArchiveNote = (id) => {
@@ -516,17 +486,13 @@ function App() {
 
   // Toggle favorite note
   const toggleFavorite = (id) => {
-    console.log('Toggle favorite for note:', id);
     const newFavorites = new Set(favorites);
     if (newFavorites.has(id)) {
       newFavorites.delete(id);
-      console.log('Removed from favorites');
     } else {
       newFavorites.add(id);
-      console.log('Added to favorites');
     }
     setFavorites(newFavorites);
-    console.log('New favorites:', newFavorites);
   };
 
 
@@ -637,11 +603,6 @@ function App() {
               onCreateFolder={openCreateFolderModal}
               onEditFolder={editFolder}
               onDeleteFolder={deleteFolder}
-              onShowFolderNotes={showFolderNotesList}
-              showFolderNotes={showFolderNotes}
-              selectedFolderId={selectedFolderId}
-              folderNotes={getNotesInFolder(selectedFolderId)}
-              onNoteClick={handleNoteClick}
               showFolderMenu={showFolderMenu}
               onToggleFolderMenu={toggleFolderMenu}
               onOpenFolderPopup={openFolderPopup}
@@ -915,11 +876,6 @@ function RecentFoldersSection({
   onCreateFolder, 
   onEditFolder, 
   onDeleteFolder,
-  onShowFolderNotes,
-  showFolderNotes,
-  selectedFolderId,
-  folderNotes,
-  onNoteClick,
   showFolderMenu,
   onToggleFolderMenu,
   onOpenFolderPopup,
@@ -979,32 +935,6 @@ function RecentFoldersSection({
         </div>
       </div>
 
-      {/* Folder Notes List */}
-      {showFolderNotes && selectedFolderId && (
-        <div className="folder-notes-list">
-          <div className="folder-notes-header">
-            <h3>Notes in {folders.find(f => f.id === selectedFolderId)?.name}</h3>
-            <button className="close-notes-btn" onClick={() => onShowFolderNotes(null)}>✕</button>
-          </div>
-          <div className="folder-notes-content">
-            {folderNotes.length === 0 ? (
-              <p className="no-notes">No notes in this folder</p>
-            ) : (
-              folderNotes.map(note => (
-                <div 
-                  key={note.id} 
-                  className="folder-note-item"
-                  onClick={() => onNoteClick(note.id)}
-                >
-                  <h4>{note.title}</h4>
-                  <p>{note.body.substring(0, 100)}...</p>
-                  <span className="note-date">{new Date(note.createdAt).toLocaleDateString()}</span>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
     </section>
   );
 }
@@ -1329,7 +1259,6 @@ function NoteCard({
       className={`note-card ${note.archived ? 'archived' : ''} ${isCollapsed ? 'collapsed' : ''} ${isFavorite ? 'favorite' : ''}`}
       onClick={isArchive ? handleCardClick : undefined}
       style={{ cursor: isArchive ? 'pointer' : 'default' }}
-      data-note-id={note.id}
     >
       <div className="note-header">
         <h3 className="note-title">
@@ -1343,38 +1272,44 @@ function NoteCard({
           >
             {note.archived ? '📂' : '📦'}
           </button>
-          <button 
-            className="action-btn menu-btn" 
-            onClick={() => onToggleMenu(note.id)}
-            title="More options"
-          >
-            ⋯
-          </button>
           
-          {showMenu && (
-            <div className="note-menu">
+          {/* Hanya tampilkan menu 3 titik untuk notes yang tidak di-archive */}
+          {!isArchive && (
+            <>
               <button 
-                className="action-btn favorite-btn" 
-                onClick={() => onToggleFavorite(note.id)}
-                title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                className="action-btn menu-btn" 
+                onClick={() => onToggleMenu(note.id)}
+                title="More options"
               >
-                {isFavorite ? '❤️' : '🤍'}
+                ⋯
               </button>
-              <button 
-                className="action-btn edit-btn" 
-                onClick={() => onEdit(note)}
-                title="Edit note"
-              >
-                ✏️
-          </button>
-          <button 
-                className="action-btn delete-btn" 
-            onClick={() => onDelete(note.id)}
-                title="Delete note"
-          >
-                🗑️
-          </button>
-        </div>
+              
+              {showMenu && (
+                <div className="note-menu">
+                  <button 
+                    className="action-btn favorite-btn" 
+                    onClick={() => onToggleFavorite(note.id)}
+                    title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    {isFavorite ? '❤️' : '🤍'}
+                  </button>
+                  <button 
+                    className="action-btn edit-btn" 
+                    onClick={() => onEdit(note)}
+                    title="Edit note"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="action-btn delete-btn" 
+                    onClick={() => onDelete(note.id)}
+                    title="Delete note"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              )}
+            </>
           )}
       </div>
       </div>
@@ -1430,9 +1365,6 @@ function Footer() {
           </div>
         </div>
       </div>
-      <p className="copyright">
-        © 2025 Noto
-      </p>
     </footer>
   );
 }
