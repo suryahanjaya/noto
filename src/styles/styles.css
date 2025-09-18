@@ -2151,12 +2151,11 @@ body::after {
 /* Simple Footer */
 .app-footer {
   margin-top: 2rem;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
 }
 
 .footer-content {
@@ -2164,16 +2163,28 @@ body::after {
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.footer-left {
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
 }
 
 .footer-brand {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .footer-logo {
@@ -2206,6 +2217,64 @@ body::after {
   margin: 0;
 }
 
+/* Developer Info */
+.developer-info {
+  text-align: right;
+}
+
+.developer-name {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.developer-title {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.social-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.social-link:hover {
+  color: var(--accent);
+}
+
+/* Instagram hover effect */
+.social-link[href*="instagram"]:hover {
+  color: #E4405F;
+}
+
+/* LinkedIn hover effect */
+.social-link[href*="linkedin"]:hover {
+  color: #0077B5;
+}
+
+/* GitHub hover effect */
+.social-link[href*="github"]:hover {
+  color: #333;
+}
+
+/* Dark mode GitHub hover */
+[data-theme="dark"] .social-link[href*="github"]:hover {
+  color: #f0f6fc;
+}
+
 .footer-bottom {
   margin-top: 0.5rem;
 }
@@ -2224,6 +2293,25 @@ body::after {
   
   .footer-logo {
     font-size: 1.3rem;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .footer-right {
+    align-items: center;
+  }
+  
+  .developer-info {
+    text-align: center;
+  }
+  
+  .social-links {
+    justify-content: center;
   }
   
   .footer-tagline {

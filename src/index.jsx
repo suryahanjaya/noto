@@ -1303,20 +1303,37 @@ function Footer() {
   return (
     <footer className="app-footer">
       <div className="footer-content">
-        <div className="footer-brand">
-          <div className="footer-logo">
-            <div className="logo-icon">N</div>
-            <span>Noto</span>
+        <div className="footer-left">
+          <div className="footer-brand">
+            <div className="footer-logo">
+              <div className="logo-icon">N</div>
+              <span>Noto</span>
+            </div>
+            <p className="footer-tagline">
+              Simple notes app for modern productivity
+            </p>
           </div>
-          <p className="footer-tagline">
-            Simple notes app for modern productivity
-          </p>
-      </div>
-        
-        <div className="footer-bottom">
           <p className="copyright">
-            © 2025 Noto. Made with ❤️
+            © 2025 Noto
           </p>
+        </div>
+        
+        <div className="footer-right">
+          <div className="developer-info">
+            <p className="developer-name">Surya Hanjaya</p>
+            <p className="developer-title">Developer</p>
+          </div>
+          <div className="social-links">
+            <a href="https://www.instagram.com/h4njy/" target="_blank" rel="noopener noreferrer" className="social-link">
+              Instagram
+            </a>
+            <a href="https://www.linkedin.com/in/surya-hanjaya/" target="_blank" rel="noopener noreferrer" className="social-link">
+              LinkedIn
+            </a>
+            <a href="https://github.com/suryahanjaya?tab=repositories" target="_blank" rel="noopener noreferrer" className="social-link">
+              GitHub
+            </a>
+          </div>
         </div>
       </div>
     </footer>
