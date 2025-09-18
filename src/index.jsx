@@ -163,9 +163,9 @@ function App() {
   const [showFolderMenu, setShowFolderMenu] = useState(new Set());
   const [showFolderPopup, setShowFolderPopup] = useState(null);
   const [folders, setFolders] = useState([
-    { id: 1, name: 'Movie Review', date: '12/12/2021', color: 'blue', noteCount: 0 },
-    { id: 2, name: 'Class Notes', date: '12/12/2021', color: 'pink', noteCount: 0 },
-    { id: 3, name: 'Book Lists', date: '12/12/2021', color: 'yellow', noteCount: 0 },
+    { id: 1, name: 'Movie Reviews', date: '12/12/2021', color: 'blue', noteCount: 0 },
+    { id: 2, name: 'Programming Notes', date: '12/12/2021', color: 'pink', noteCount: 0 },
+    { id: 3, name: 'Tech Books', date: '12/12/2021', color: 'yellow', noteCount: 0 },
   ]);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
@@ -430,13 +430,17 @@ function App() {
 
   // Toggle favorite note
   const toggleFavorite = (id) => {
+    console.log('Toggle favorite for note:', id);
     const newFavorites = new Set(favorites);
     if (newFavorites.has(id)) {
       newFavorites.delete(id);
+      console.log('Removed from favorites');
     } else {
       newFavorites.add(id);
+      console.log('Added to favorites');
     }
     setFavorites(newFavorites);
+    console.log('New favorites:', newFavorites);
   };
 
 
@@ -860,12 +864,6 @@ function RecentFoldersSection({
                     >
                       Delete
                     </button>
-                    <button 
-                      className="folder-menu-item" 
-                      onClick={(e) => { e.stopPropagation(); onShowFolderNotes(folder.id); }}
-                    >
-                      View Notes
-                    </button>
                   </div>
                 )}
               </div>
@@ -1133,7 +1131,7 @@ function MyNotesSection({
       ) : (
         <div className="notes-grid">
           {notes.map((note, index) => (
-            <div key={note.id} className={`note-card-commercial ${getNoteColor(index)}`}>
+            <div key={note.id} className={`note-card-commercial ${getNoteColor(index)} ${favorites.has(note.id) ? 'favorite' : ''}`}>
               <div className="note-header-commercial">
                 <span className="note-date-commercial">
                   {new Date(note.createdAt).toLocaleDateString('en-US', { 
@@ -1203,12 +1201,6 @@ function MyNotesSection({
               </div>
             </div>
           ))}
-          <div className="note-card-commercial new-note">
-            <div className="new-note-content">
-              <div className="new-note-icon">📄</div>
-              <span>New Note</span>
-            </div>
-          </div>
     </div>
       )}
     </section>

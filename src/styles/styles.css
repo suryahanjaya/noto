@@ -407,9 +407,9 @@ body::after {
 .search-input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 3rem;
-  border: 2px solid var(--accent);
+  border: none;
   border-radius: 25px;
-  background: var(--surface);
+  background: #DDF4E7;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   font-size: 0.9rem;
@@ -420,7 +420,6 @@ body::after {
 
 .search-input:focus {
   outline: none;
-  border-color: var(--primary);
   background: var(--surface-elevated);
   box-shadow: 0 6px 20px rgba(50, 142, 110, 0.3);
   transform: translateY(-1px);
@@ -657,7 +656,7 @@ body::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: 0.1rem;
 }
 
 .folder-stats .note-count {
@@ -842,17 +841,17 @@ body::after {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* My Notes: light mode - light green, dark mode - primary gradient */
+/* My Notes: light mode - gradient DDF6D2 ke ECFAE5 */
 .note-card-commercial.yellow {
-  background: linear-gradient(135deg, #E1EEBC 0%, #90C67C 100%);
+  background: linear-gradient(135deg, #DDF6D2 0%, #ECFAE5 100%);
 }
 
 .note-card-commercial.pink {
-  background: linear-gradient(135deg, #E1EEBC 0%, #90C67C 100%);
+  background: linear-gradient(135deg, #DDF6D2 0%, #ECFAE5 100%);
 }
 
 .note-card-commercial.blue {
-  background: linear-gradient(135deg, #E1EEBC 0%, #90C67C 100%);
+  background: linear-gradient(135deg, #DDF6D2 0%, #ECFAE5 100%);
 }
 
 /* Dark mode: semua mengikuti Modularization (primary gradient) */
@@ -860,6 +859,20 @@ body::after {
 [data-theme="dark"] .note-card-commercial.pink,
 [data-theme="dark"] .note-card-commercial.blue {
   background: var(--gradient-primary);
+}
+
+/* Favorite effect untuk note-card-commercial */
+.note-card-commercial.favorite {
+  background: linear-gradient(135deg, #FFE082 0%, #FFC107 50%, #FF8F00 100%) !important;
+  border: 1px solid rgba(255, 193, 7, 0.6) !important;
+  box-shadow: 0 8px 32px 0 rgba(255, 193, 7, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Dark mode favorite untuk note-card-commercial */
+[data-theme="dark"] .note-card-commercial.favorite {
+  background: linear-gradient(135deg, #FFE082 0%, #FFC107 50%, #FF8F00 100%) !important;
+  border: 1px solid rgba(255, 193, 7, 0.6) !important;
+  box-shadow: 0 8px 32px 0 rgba(255, 193, 7, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
 }
 
 .note-header-commercial {
@@ -1776,12 +1789,12 @@ body::after {
 
 /* Archive notes: light mode mengikuti Module Bundler (blue/primary) */
 .note-card.archived {
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%);
 }
 
-/* Archive notes: dark mode tetap menggunakan bg-secondary */
+/* Archive notes: dark mode menggunakan gradient hijau yang lebih tua */
 [data-theme="dark"] .note-card.archived {
-  background: var(--bg-secondary);
+  background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
 }
 
 .note-card.archived::before {
@@ -1800,7 +1813,7 @@ body::after {
   padding: 0.75rem 1rem;
   cursor: pointer;
   transition: all var(--transition-normal);
-  background: var(--surface-elevated);
+  background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%);
   border: 1px solid var(--border-light);
   position: relative;
   min-height: 60px;
@@ -1812,6 +1825,11 @@ body::after {
   box-shadow: var(--shadow-lg);
   border-color: var(--accent);
   background: var(--surface);
+}
+
+/* Dark mode untuk archived collapsed */
+[data-theme="dark"] .note-card.archived.collapsed {
+  background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
 }
 
 .note-card.archived.collapsed .note-body {
@@ -1831,6 +1849,10 @@ body::after {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .note-card.archived.collapsed .note-actions {
