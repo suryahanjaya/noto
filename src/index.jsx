@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { getInitialData, showFormattedDate } from './utils/index.js';
 
@@ -116,6 +116,40 @@ const initialNotes = [
     folderId: 2
   },
   
+  // Default archived notes
+  {
+    id: 9001,
+    title: "Old Meeting Notes",
+    body: "Meeting notes from last month's project discussion. Key points: budget approval, timeline adjustments, and resource allocation.",
+    archived: true,
+    createdAt: new Date('2023-11-15').toISOString(),
+    folderId: null
+  },
+  {
+    id: 9002,
+    title: "Completed Tasks",
+    body: "List of completed tasks from previous sprint. All deliverables have been submitted and approved by the client.",
+    archived: true,
+    createdAt: new Date('2023-12-01').toISOString(),
+    folderId: null
+  },
+  {
+    id: 9003,
+    title: "Old Research Data",
+    body: "Research findings from market analysis project. Data includes customer surveys, competitor analysis, and market trends.",
+    archived: true,
+    createdAt: new Date('2023-10-20').toISOString(),
+    folderId: null
+  },
+  {
+    id: 9004,
+    title: "Previous Version Notes",
+    body: "Notes from the previous version of this project. Contains old requirements and specifications that are no longer relevant.",
+    archived: true,
+    createdAt: new Date('2023-09-10').toISOString(),
+    folderId: null
+  },
+  
   // Book Lists folder notes
   {
     id: 3001,
@@ -145,11 +179,28 @@ const initialNotes = [
 
 // Komponen utama App
 function App() {
+  // Deteksi tema sistem
+  const getSystemTheme = () => {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return true; // Dark mode
+    }
+    return false; // Light mode
+  };
+
+  // Inisialisasi tema dari localStorage atau sistem
+  const getInitialTheme = () => {
+    const savedTheme = localStorage.getItem('noto-theme');
+    if (savedTheme !== null) {
+      return savedTheme === 'dark';
+    }
+    return getSystemTheme();
+  };
+
   const [notes, setNotes] = useState(initialNotes);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(getInitialTheme());
   const [sortBy, setSortBy] = useState('newest');
   const [filterBy, setFilterBy] = useState('all');
   const [expandedArchives, setExpandedArchives] = useState(new Set());
@@ -175,10 +226,45 @@ function App() {
   const [showFolderNotes, setShowFolderNotes] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState(null);
 
-  // Apply theme
-  React.useEffect(() => {
+  // Apply theme and save to localStorage
+  useEffect(() => {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    localStorage.setItem('noto-theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
+
+  // Listen for system theme changes (only if no manual preference)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const handleThemeChange = (e) => {
+      // Only update if no manual preference is saved
+      const savedTheme = localStorage.getItem('noto-theme');
+      if (savedTheme === null) {
+        setDarkMode(e.matches);
+      }
+    };
+
+    // Add listener
+    mediaQuery.addEventListener('change', handleThemeChange);
+
+    // Cleanup
+    return () => {
+      mediaQuery.removeEventListener('change', handleThemeChange);
+    };
+  }, []);
+
+  // Fungsi toggle tema yang cerdas
+  const toggleTheme = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    // Tema akan disimpan otomatis di useEffect
+  };
+
+  // Fungsi reset ke tema sistem
+  const resetToSystemTheme = () => {
+    localStorage.removeItem('noto-theme');
+    setDarkMode(getSystemTheme());
+  };
 
   // Fungsi untuk menambah catatan baru
   const addNote = (e) => {
@@ -523,7 +609,8 @@ function App() {
         totalNotes={notes.length} 
         activeNotes={activeNotes.length}
         darkMode={darkMode}
-        setDarkMode={setDarkMode}
+        onToggleTheme={toggleTheme}
+        onResetToSystem={resetToSystemTheme}
         onExport={exportNotes}
         />
         
@@ -784,7 +871,7 @@ function App() {
 }
 
 // Komponen Header dengan branding Noto dan dark mode toggle
-function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport }) {
+function Header({ totalNotes, activeNotes, darkMode, onToggleTheme, onResetToSystem, onExport }) {
   return (
     <header className="app-header">
       <div className="header-content">
@@ -795,10 +882,17 @@ function Header({ totalNotes, activeNotes, darkMode, setDarkMode, onExport }) {
         <div className="header-actions">
           <button 
             className="theme-toggle"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={onToggleTheme}
             title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {darkMode ? '☀️' : '🌙'}
+          </button>
+          <button 
+            className="theme-toggle"
+            onClick={onResetToSystem}
+            title="Reset to System Theme"
+          >
+            🔄
           </button>
           <button 
             className="theme-toggle"
@@ -1006,7 +1100,7 @@ function NoteInput({ title, setTitle, body, setBody, addNote, folders, selectedF
           />
           <div className={`char-counter ${remainingChars <= 10 ? 'warning' : ''}`}>
             {remainingChars}/50
-          </div>
+        </div>
         </div>
         <div className="input-group">
           <label>📁 Add to folder:</label>
@@ -1030,7 +1124,7 @@ function NoteInput({ title, setTitle, body, setBody, addNote, folders, selectedF
           onChange={(e) => setBody(e.target.value)}
             rows="4"
           />
-        </div>
+    </div>
         <button type="submit" className="submit-btn">
             Save Note
         </button>
@@ -1121,7 +1215,7 @@ function MyNotesSection({
     <section className="my-notes-section">
       <div className="section-header">
         <h2 className="section-title">{title}</h2>
-      </div>
+    </div>
       
       {notes.length === 0 ? (
         <div className="empty-state">
@@ -1282,7 +1376,7 @@ function NoteCard({
           </button>
         </div>
           )}
-        </div>
+      </div>
       </div>
       
       {!isCollapsed && (
@@ -1312,7 +1406,7 @@ function Footer() {
             <p className="footer-tagline">
               Simple notes app for modern productivity
             </p>
-          </div>
+    </div>
           <p className="copyright">
             © 2025 Noto
           </p>
@@ -1336,6 +1430,9 @@ function Footer() {
           </div>
         </div>
       </div>
+      <p className="copyright">
+        © 2025 Noto
+      </p>
     </footer>
   );
 }

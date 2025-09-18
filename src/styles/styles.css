@@ -337,8 +337,8 @@ body::after {
   -webkit-backdrop-filter: blur(20px);
   background: var(--glass-bg);
   border-bottom: 1px solid var(--glass-border);
-  padding: 1rem 0;
-  margin-bottom: 2rem;
+  padding: 0.75rem 0;
+  margin-bottom: 1.5rem;
   box-shadow: var(--glass-shadow);
   animation: slideInDown 0.6s var(--bounce);
   transition: all var(--transition-normal);
@@ -2285,41 +2285,169 @@ body::after {
   margin: 0;
 }
 
-/* Footer responsive */
+/* Desktop: copyright di dalam footer-content */
+@media (min-width: 769px) {
+  .app-footer .copyright {
+    display: none;
+  }
+  
+  .footer-left .copyright {
+    display: block;
+  }
+}
+
+/* Mobile Responsive - Combined */
 @media (max-width: 768px) {
+  /* Header */
+  .app-header {
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+  }
+  
+  .header-content {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+  }
+  
+  .logo {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  
+  .search-container {
+    flex: 1;
+    max-width: 200px;
+    margin: 0 0.5rem;
+  }
+  
+  .search-input {
+    padding: 0.4rem 0.6rem 0.4rem 2.2rem;
+    font-size: 0.8rem;
+  }
+  
+  .header-right {
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  /* Filter Controls - Rata Kiri */
+  .filter-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    text-align: left;
+  }
+  
+  .filter-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+  }
+  
+  .filter-group label {
+    font-size: 0.75rem;
+    text-align: left;
+  }
+  
+  .filter-group select {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  /* Pastikan semua elemen filter rata kiri */
+  .filter-controls,
+  .filter-group,
+  .filter-group label,
+  .filter-group select {
+    text-align: left !important;
+  }
+  
+  /* Override untuk memastikan filter rata kiri di mobile */
+  .filter-controls * {
+    text-align: left !important;
+  }
+  
+  /* Override justify-content untuk mobile */
+  .filter-controls {
+    justify-content: flex-start !important;
+  }
+  
+  /* Footer */
+  .app-footer {
+    padding: 0.5rem 0;
+    margin-top: 1rem;
+  }
+  
   .footer-content {
     padding: 0 1rem;
-  }
-  
-  .footer-logo {
-    font-size: 1.3rem;
-  }
-  
-  .footer-content {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     text-align: center;
     gap: 1rem;
   }
   
+  .footer-left {
+    flex: 1;
+    text-align: left;
+  }
+  
+  .footer-left .copyright {
+    display: none;
+  }
+  
   .footer-right {
+    flex: 1;
     align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .footer-brand {
+    gap: 0.1rem;
+  }
+  
+  .footer-logo {
+    font-size: 1rem;
+  }
+  
+  .footer-tagline {
+    font-size: 0.7rem;
   }
   
   .developer-info {
     text-align: center;
   }
   
+  .developer-name {
+    font-size: 0.75rem;
+  }
+  
+  .developer-title {
+    font-size: 0.65rem;
+  }
+  
   .social-links {
+    gap: 0.5rem;
     justify-content: center;
   }
   
-  .footer-tagline {
-    font-size: 0.85rem;
+  .social-link {
+    font-size: 0.65rem;
   }
   
   .copyright {
-    font-size: 0.75rem;
+    font-size: 0.6rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    padding: 0 1rem;
+    color: var(--text-secondary);
   }
 }
 
@@ -2332,20 +2460,28 @@ body::after {
   }
   
   .header-content {
-    flex-direction: column;
-    gap: 0.75rem;
-    text-align: center;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0 0.5rem;
   }
   
   .logo {
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
+    flex-shrink: 0;
   }
   
   .search-container {
-    width: 100%;
-    max-width: 250px;
+    flex: 1;
+    max-width: 180px;
+    margin: 0 0.25rem;
+  }
+  
+  .header-right {
+    gap: 0.5rem;
+    flex-shrink: 0;
   }
   
   .logo-icon {
@@ -2455,8 +2591,14 @@ body::after {
   .filter-controls {
     flex-direction: column;
     gap: 0.5rem;
-    padding: 0.75rem;
+    padding: 0.5rem;
     margin: 0.5rem 0;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+  
+  .filter-controls * {
+    text-align: left !important;
   }
   
   .filter-group {
@@ -2535,14 +2677,42 @@ body::after {
     padding: 0 1rem 4rem;
   }
   
+  .app-header {
+    padding: 0.75rem 0;
+    margin-bottom: 1.25rem;
+  }
+  
   .header-content {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding: 0 1rem;
   }
   
   .logo {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+  
+  .search-container {
+    max-width: 250px;
+  }
+  
+  .search-input {
+    padding: 0.6rem 0.8rem 0.6rem 2.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .filter-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.6rem;
+    margin: 0.75rem 0;
+  }
+  
+  .filter-group {
+    flex: 1;
+    min-width: 120px;
   }
   
   .notes-grid {
@@ -2664,6 +2834,30 @@ body::after {
   }
 }
 
+/* Mobile Override - Pastikan filter rata kiri di mobile */
+@media (max-width: 768px) {
+  .filter-controls {
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+  
+  .filter-controls * {
+    text-align: left !important;
+  }
+  
+  .filter-group {
+    text-align: left !important;
+  }
+  
+  .filter-group label {
+    text-align: left !important;
+  }
+  
+  .filter-group select {
+    text-align: left !important;
+  }
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {
@@ -2713,26 +2907,8 @@ body::after {
 }
 
 
-/* Mobile Responsive for Commercial Layout */
+/* Additional Mobile Styles */
 @media (max-width: 768px) {
-  .header-content {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .header-center {
-    order: -1;
-  }
-  
-  .search-container {
-    max-width: 100%;
-  }
-  
-  .user-info {
-    justify-content: center;
-  }
-  
   .side-by-side-layout {
     grid-template-columns: 1fr;
     gap: 1.5rem;
